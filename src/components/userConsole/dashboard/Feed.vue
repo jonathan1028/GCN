@@ -76,6 +76,8 @@ import { ADD_INTEREST_TO_OPPORTUNITIES_MUTATION, ADD_GOING_TO_OPPORTUNITIES_MUTA
 import moment from 'moment'
 import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth } from 'date-fns'
 
+console.log('Test, test ,test')
+
 export default {
   name: 'Feed',
   props: {
@@ -324,7 +326,7 @@ export default {
   -webkit-box-shadow: 0 1px 2px #777;
   -moz-box-shadow: 0 2px 1px #777;
   box-shadow: 0 2px 1px #777;
-  border-radius: 3vh;
+  // border-radius: 3vh;
 }
 .imageBlock {
   height: 10vh;

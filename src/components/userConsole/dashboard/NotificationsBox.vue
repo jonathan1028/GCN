@@ -144,14 +144,16 @@ export default {
   align-content: start;
 }
 .notifications__header {
-  background-image: linear-gradient(to bottom, #efba34, #f3cc6a, #f7dd9b, #fbeecb, #fffefb);
-  border-top-right-radius: 3vh;
-  border-top-left-radius: 3vh;
+  // background: rgb(245,245,249);
+  // background: linear-gradient(0deg, rgba(245,245,249,1) 0%, rgba(255,255,255,1) 0%, rgba(255,204,0,1) 100%);
+  // border-top-right-radius: 3vh;
+  // border-top-left-radius: 3vh;
   height: 8vh;
   font-weight: 900;
   text-align: center;
   white-space: nowrap;
-  border-bottom: .3vh solid var(--theme-color4);
+  border-bottom: .3vh solid var(--background-color4);
+  border-top: .75vh solid var(--background-color1);
   display: grid;
   grid-template-rows: 1fr 2fr;
   grid-template-columns: 1fr 3fr;

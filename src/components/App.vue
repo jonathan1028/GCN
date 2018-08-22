@@ -20,7 +20,7 @@ export default {
 /* Removes default margin and padding for all html elements */
 * { margin: 0; padding: 0; }
 html {
-  background-color: var(--background-color2);
+  background-color: var(--background-color4);
 }
 /* ------------------------- Application Variables ------------------------- */
 :root {
@@ -34,6 +34,7 @@ html {
   --background-color1: #fc0;
   --background-color2: white;
   --background-color3: #555;
+  --background-color4: #e7e9ea;
 
   --theme-color1: #f7ca44;
   --theme-color2: #fff2c7;

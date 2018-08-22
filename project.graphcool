@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 12
+# version: 13
 
 type User @model {
   id: ID! @isUnique
@@ -20,6 +20,8 @@ type User @model {
   interestedOpportunities: [Opportunity!]! @relation(name: "InterestedOpportunities")
   goingOpportunities: [Opportunity!]! @relation(name: "GoingOpportunities")
   attendedOpportunities: [Opportunity!]! @relation(name: "AttendedOpportunities")
+  organizations: [Organization!]! @relation(name: "OrgsPersonnel")
+  responses: [Response!]! @relation(name: "UserResponses")
 }
 
 type File @model {
@@ -31,6 +33,20 @@ type File @model {
   size: Int!
   updatedAt: DateTime!
   url: String! @isUnique
+}
+
+type Location @model {
+  id: ID! @isUnique
+  name: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zipcode: String
+  country: String
+  latitude: String
+  longitude: String
+  organization: Organization @relation(name: "OrganizationAddress")
 }
 
 type Opportunity @model {
@@ -46,6 +62,7 @@ type Opportunity @model {
   interestedUsers: [User!]! @relation(name: "InterestedOpportunities")
   goingUsers: [User!]! @relation(name: "GoingOpportunities")
   attendedUsers: [User!]! @relation(name: "AttendedOpportunities")
+  responses: [Response!]! @relation(name: "OpportunityResponses")
 }
 
 type VolunteeringLog @model {
@@ -77,6 +94,26 @@ type Medallion @model {
   ownedBy: User @relation(name: "UserMedallions")
   previousOwnerId: String
   issuedBy: User @relation(name: "UserIssuedMedallions")
+}
+
+type Response @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  message: String
+  type: String
+  ownedBy: User @relation(name: "UserResponses")
+  opportunity: Opportunity @relation(name: "OpportunityResponses")
+}
+
+type Organization @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  url: String
+  address: Location @relation(name: "OrganizationAddress")
+  personnel: User @relation(name: "OrgsPersonnel")
 }
 
 type Person @model {

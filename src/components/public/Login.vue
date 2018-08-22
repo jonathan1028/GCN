@@ -26,7 +26,7 @@
       </router-link>
     </div>
     <div>
-      <button 
+      <button
         class="_button1"
         @click="login">
         LOGIN
