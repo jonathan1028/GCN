@@ -6,42 +6,132 @@
         v-for='(item, index) in filteredData'
         :key='index'
       >
-        <div class="imageBlock">
-          <img src="" href=''>
-        </div>
-        <div class="textBlock">
-          <div>{{item.name}}</div>
-          <div class="orgNameBlock">
-            <p>with &nbsp;</p>
-            <p class="orgName">Organization Name</p>
+        <div class="left-column">
+          <div class="image-block">
+            <img src="" href=''>
           </div>
-          <p class="description">{{item.description}}</p>
         </div>
-        <div class="timeLocationBlock">
-          <p class="startTime">{{item.startTime | formatDate}}</p>
-          <!-- <p>{{item.endTime | formatDate}}</p> -->
-          <p class="location">{{item.address}}</p>
+        <!-- -------------------------------------- Center Column ------------------------------ -->
+        <div class="center-column">
+          <div class="title">
+            <div>{{item.name}}</div>
+          </div>
+          <div class="org-name">
+            {{`with Organization Name`}}
+          </div>
+          <div class="description">
+            {{item.description}}
+          </div>
+          <div class="details">
+            <icon
+              class="icon"
+              name="regular/calendar-alt"
+            ></icon>
+            <div>{{item.startTime | formatDate}} <span v-if="item.endTime"> - </span></div>
+            <icon
+              class="icon"
+              name="map-marker-alt"
+            ></icon>
+            <div>6500 Metropolis Dr</div>
+            <div></div>
+            <div>{{item.endTime | formatDate}}</div>
+            <div></div>
+            <div>Austin, TX 78744</div>
+          </div>
         </div>
-        <div class="rightColumn">
-          1h
+        <div class="buttons-block">
+          <div class="left-buttons">
+            <button
+              class="button1"
+              @click='interested(item)'
+            >
+              <icon
+                class="icon"
+                name="regular/thumbs-up"
+              ></icon>
+              <div class="button-text">
+                Interested
+              </div>
+            </button>
+            <button
+              class="button2"
+              @click='going(item)'
+            >
+              <icon
+                class="icon"
+                name="check"
+              ></icon>
+              <div class="button-text">
+                Going
+              </div>
+            </button>
+            <button
+              class="button3"
+            >
+              <icon
+                class="icon"
+                name="undo"
+              ></icon>
+              <div class="button-text">
+                Undo
+              </div>
+            </button>
+          </div>
+          <button
+            class="button4"
+          >
+            <icon
+              class="icon"
+              name="regular/clock"
+            ></icon>
+            <div class="button-text">
+              Log Time
+            </div>
+          </button>
         </div>
-        <div class="buttonsBlock">
-          <button
-            class="button1"
-            @click='interested(item)'
+        <!-- ---------------------------------------- User Responses -------------------------- -->
+        <div class="user-responses">
+          <div class="user-response-header">
+            <div class="user-response-summary">
+              <div>Images</div>
+              <div>Responses summary text</div>
+            </div>
+            <icon
+              class="icon"
+              name="chevron-down"
+            ></icon>
+          </div>
+          <ul
+            v-for='(user, index) in item.interestedUsers'
+            :key="index + '-interested'"
           >
-            Interested
-          </button>
-          <button
-            @click='going(item)'
-          >
-            Going
-          </button>
-          <button
-            class="button3"
-          >
-            Ignore
-          </button>
+            <li class="user-response _box-shadow1">
+              <div class="user-response-row">
+                <div class="user-response-image"></div>
+                <div class="user-response-text">{{`${getName(user.firstName, user.lastName)} is interested`}}&nbsp;</div>
+              </div>
+              <div class="user-response-row2">
+                <div class="user-response-timestamp">Response Date</div>
+                <button class="button1">
+                  <icon
+                    class="icon"
+                    name="star"
+                  ></icon>
+                  <div class="button-text">
+                    Recognize
+                  </div>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- -------------------------------------- Right Column ------------------------------ -->
+        <div class="right-column">
+          <div class="time-stamp">
+            1h
+          </div>
+        </div>
+        <!-- <div class="timeLocationBlock">
         </div>
         <div class="usersBlock">
           <ul
@@ -64,13 +154,14 @@
               <div>is going</div>
             </li>
           </ul>
-        </div>
+        </div> -->
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+// import 'font-awesome/css/font-awesome.css'
 // import { ALL_USERS_QUERY } from '../../../constants/graphql'
 import { ADD_INTEREST_TO_OPPORTUNITIES_MUTATION, ADD_GOING_TO_OPPORTUNITIES_MUTATION, ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
 import moment from 'moment'
@@ -224,7 +315,7 @@ export default {
     },
     formatDate: function (date) {
       if (date !== null) {
-        return moment(date).format('MMMM Do YYYY, h:mm:ss a')
+        return moment(date).format('MMMM Do YYYY, h:mm a')
       }
     }
   },
@@ -314,12 +405,20 @@ export default {
   // pic opp-info   timestamp
   // XXX button-row XXX
   // ------ Followers -------
-  grid-template-columns: 10% 68% 10%;
-  grid-template-rows: 20% 10% 20% 50%;
-  grid-column-gap: 5%;
+  grid-template-columns: 13% 78% 5%;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+     "left-column      center-column            right-column"
+     "left-column      center-column         .    "
+     "left-column      center-column          .    "
+     ".                buttons-block .    "
+     "user-responses   user-responses    user-responses"
+     "response-summary response-summary response-summary"
+     "responses        responses        responses";
+  grid-column-gap: 2%;
   background-color: white;
   margin-top: 1%;
-  padding: 2vh;
+  padding: 2%;
   /* border: 1px solid #BFBFBF;
   background-color: white;
   box-shadow: 3px 3px 3px 3px #aaaaaa; */
@@ -328,42 +427,67 @@ export default {
   box-shadow: 0 2px 1px #777;
   // border-radius: 3vh;
 }
-.imageBlock {
+.left-column {
+  grid-area: left-column;
+  // border: 1px solid black;
+}
+.center-column {
+  grid-area: center-column;
+  // border: 1px solid black;
+}
+.right-column {
+  grid-area: right-column;
+  text-align: right;
+  // border: 1px solid black;
+}
+.image-block {
   height: 10vh;
   width: 10vh;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  grid-column-start: 1;
-  grid-column-end: 2;
+  grid-area: image-block;
   background-color: lightgray;
   border-radius: 5vh;
 }
+.title {
+  grid-area: title;
+  font-size: 3vh;
+  color: var(--font-color1);
+}
+
+.org-name {
+  grid-area: org-name;
+  display: flex;
+}
+
+.description {
+  grid-area: description;
+  margin-top: 1vh;
+  font-weight: 100;
+}
+
+.details {
+  grid-area: details;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 5% 45% 5% 45%;
+  margin-top: 1vh;
+}
+
 .textBlock {
-  grid-row-start: 1;
-  grid-row-end: 2;
-  grid-column-start: 2;
-  grid-column-end: 3;
-  // padding-left: 5%;
   font-size: 3vh;
   p {
     font-size: 2vh;
   }
   // border: 1px solid red;
 }
-.orgNameBlock {
-  display: flex;
+
+.icon {
+  padding-top: .25vh;
 }
 .orgName {
   text-decoration: underline;
 }
-.description {
-  margin-top: 1vh;
-}
+
 .timeLocationBlock {
-  grid-row-start: 2;
-  grid-row-end: 3;
-  grid-column-start: 2;
-  grid-column-end: 3;
   display: flex;
   justify-content: space-between;
   p{
@@ -371,63 +495,115 @@ export default {
   }
   // border: 1px solid red;
 }
+
 .rightColumn {
-  grid-row-start: 1;
-  grid-row-end: -1;
-  grid-column-start: 3;
-  grid-column-end: 4;
   // background-color: gray;
   width: 10vh;
   height: 10vh;
 }
-.buttonsBlock {
+.buttons-block {
   // border: 1px solid red;
-  grid-row-start: 3;
-  grid-row-end: 4;
-  grid-column-start: 2;
-  grid-column-end: 3;
-  margin-top: 1vh;
+  grid-area: buttons-block;
+  margin-top: 3vh;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .left-buttons {
+    display: flex;
+    align-items: center;
+  }
   .button1 {
-    border-top-left-radius: 3vh;
-    border-bottom-left-radius: 3vh;
+    border-top-left-radius: 1vh;
+    border-bottom-left-radius: 1vh;
     border-right: none;
   }
   .button3 {
-    border-top-right-radius: 3vh;
-    border-bottom-right-radius: 3vh;
+    border-top-right-radius: 1vh;
+    border-bottom-right-radius: 1vh;
     border-left: none;
   }
-  button {
-    font-size: 2vh;
-    padding: 1vh;
-    margin: 0vh;
-    height: auto;
-    border: .1vh solid var(--theme-color3);
-    // background-color: var(--theme-color1);
+  .button4 {
+    border-radius: 1vh;
   }
 }
-.usersBlock {
+.user-responses {
+  grid-area: user-responses;
   margin-top: 2%;
-  padding-top: 2%;
+  // padding-top: 2%;
   border-top: .25vh solid lightgray;
-  grid-row-start: 4;
-  grid-row-end: 5;
-  grid-column-start: 1;
-  grid-column-end: -1;
+  .user-response-header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+  }
+  .user-response-summary {
+    display: flex;
+    align-items: center;
+    font-size: 1.5vh;
+  }
+  .user-response {
+    display: grid;
+    grid-template-rows: auto auto;
+    padding: 2%;
+    margin-bottom: 2vh;
+  }
+  .user-response-image {
+    height: 4vh;
+    width: 4vh;
+    background-color: lightgray;
+    border-radius: 5vh;
+  }
+  .user-response-text {
+    font-size: 2.3vh;
+    margin-left: 2vh;
+  }
+  .user-response-timestamp {
+    font-size: 1.8vh;
+  }
+  .user-response-row {
+    display: flex;
+    align-items: center;
+  }
+  .user-response-row2 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .button1 {
+    border-radius: 1vh;
+  }
 }
-.userStatus {
-  display: flex;
-  margin: 1% 0%;
-  padding: 1% 2%;
-  border: .25vh solid lightgray;
-  border-radius: 3vh;
-  font-size: 1.75vh;
-  width: max-content;
-  background-color: var(--theme-color2);
-}
+// .userStatus {
+//   display: flex;
+//   margin: 1% 0%;
+//   padding: 1% 2%;
+//   border: .25vh solid lightgray;
+//   border-radius: 3vh;
+//   font-size: 1.75vh;
+//   width: max-content;
+//   background-color: var(--theme-color2);
+// }
 .userName {
   color: black;
   font-weight: 900;
+}
+button {
+  display: flex;
+  align-items: center;
+  font-size: 1.5vh;
+  padding: 1vh;
+  margin: 0vh;
+  height: auto;
+  border: .1vh solid var(--theme-color3);
+  cursor: pointer;
+  // background-color: var(--theme-color1);
+  .button-text {
+    margin-left: 1vh;
+  }
+}
+
+button:hover {
+  background-color: lightgray;
 }
 </style>

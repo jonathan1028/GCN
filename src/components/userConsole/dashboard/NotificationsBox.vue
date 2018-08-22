@@ -105,7 +105,7 @@
       <div class="count">0</div>
     </div>
     <div class="notifications__row --bottom-row">
-      <a>See all notifications...</a>
+      <button class="_button1">View All</button>
     </div>
   </div>
 </template>
