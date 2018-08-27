@@ -113,6 +113,25 @@ export const ALL_MEDALLIONS_QUERY = gql`
   }
 `
 
+export const ALL_RESPONSES_QUERY = gql`
+  query AllResponsesQuery {
+    allResponses {
+      id
+      createdAt
+      type
+      ownedBy {
+        id
+        firstName
+        lastName
+      }
+      opportunity {
+        id
+        name
+      }
+    }
+  }
+`
+
 export const ALL_PEOPLE_QUERY = gql`
   query AllPersonsQuery {
     allPersons {
@@ -141,6 +160,16 @@ export const ALL_OPPORTUNITIES_QUERY = gql`
       location
       ownedBy {
         id
+      }
+      responses {
+        id
+        createdAt
+        type
+        ownedBy {
+          id
+          firstName
+          lastName
+        }
       }
       interestedUsers {
         id
@@ -304,6 +333,18 @@ export const CREATE_MEDALLION_MUTATION = gql`
     ) {
       id
       createdAt
+    }
+  }
+`
+
+export const CREATE_RESPONSE_MUTATION = gql`
+  mutation CreateResponseMutation($type: String, $ownedById: ID!, $opportunityId: ID!) {
+    createResponse(
+      type: $type
+      ownedById: $ownedById
+      opportunityId: $opportunityId
+    ) {
+      id
     }
   }
 `
@@ -536,6 +577,16 @@ export const DELETE_OPPORTUNITY_MUTATION = gql`
 export const DELETE_PERSON_MUTATION = gql`
   mutation DeletePersonMutation($id: ID!) {
     deletePerson(
+      id: $id,
+    ) {
+      id
+    }
+  }
+`
+
+export const DELETE_RESPONSE_MUTATION = gql`
+  mutation DeleteResponseMutation($id: ID!) {
+    deleteResponse(
       id: $id,
     ) {
       id

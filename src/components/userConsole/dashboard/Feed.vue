@@ -43,7 +43,8 @@
           <div class="left-buttons">
             <button
               class="button1"
-              @click='interested(item)'
+              v-bind:class="{ active: isInterested(item) }"
+              @click='response(item, "Interested")'
             >
               <icon
                 class="icon"
@@ -55,7 +56,8 @@
             </button>
             <button
               class="button2"
-              @click='going(item)'
+              v-bind:class="{ active: isGoing(item) }"
+              @click='response(item, "Going")'
             >
               <icon
                 class="icon"
@@ -67,6 +69,7 @@
             </button>
             <button
               class="button3"
+              @click='undo(item)'
             >
               <icon
                 class="icon"
@@ -96,34 +99,49 @@
               <div>Images</div>
               <div>Responses summary text</div>
             </div>
-            <icon
-              class="icon"
-              name="chevron-down"
-            ></icon>
+            <button
+              class="toggle"
+              @click="selected.includes(item.id) ? selected.splice(selected.indexOf(item.id), 1) : selected.push(item.id)"
+            >
+              <div v-show="!selected.includes(item.id)">
+                <icon
+                  class="icon"
+                  name="chevron-down"
+                ></icon>
+              </div>
+              <div v-show="selected.includes(item.id)">
+                <icon
+                  class="icon"
+                  name="chevron-up"
+                ></icon>
+              </div>
+            </button>
           </div>
-          <ul
-            v-for='(user, index) in item.interestedUsers'
-            :key="index + '-interested'"
-          >
-            <li class="user-response _box-shadow1">
-              <div class="user-response-row">
-                <div class="user-response-image"></div>
-                <div class="user-response-text">{{`${getName(user.firstName, user.lastName)} is interested`}}&nbsp;</div>
-              </div>
-              <div class="user-response-row2">
-                <div class="user-response-timestamp">Response Date</div>
-                <button class="button1">
-                  <icon
-                    class="icon"
-                    name="star"
-                  ></icon>
-                  <div class="button-text">
-                    Recognize
-                  </div>
-                </button>
-              </div>
-            </li>
-          </ul>
+          <div v-show="selected.includes(item.id)">
+            <ul
+              v-for='(response, index) in item.responses'
+              :key="index + '-interested'"
+            >
+              <li class="user-response _box-shadow1">
+                <div class="user-response-row">
+                  <div class="user-response-image"></div>
+                  <div class="user-response-text">{{`${getName(response.ownedBy.firstName, response.ownedBy.lastName)} is ${response.type.toLowerCase()}`}}&nbsp;</div>
+                </div>
+                <div class="user-response-row2">
+                  <div class="user-response-timestamp">{{response.createdAt | timeAgo}}</div>
+                  <button class="button1">
+                    <icon
+                      class="icon"
+                      name="star"
+                    ></icon>
+                    <div class="button-text">
+                      Recognize
+                    </div>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
         <!-- -------------------------------------- Right Column ------------------------------ -->
         <div class="right-column">
@@ -163,9 +181,9 @@
 <script>
 // import 'font-awesome/css/font-awesome.css'
 // import { ALL_USERS_QUERY } from '../../../constants/graphql'
-import { ADD_INTEREST_TO_OPPORTUNITIES_MUTATION, ADD_GOING_TO_OPPORTUNITIES_MUTATION, ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
+import { ALL_RESPONSES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION, ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
 import moment from 'moment'
-import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth } from 'date-fns'
+import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth, distanceInWords } from 'date-fns'
 
 console.log('Test, test ,test')
 
@@ -186,20 +204,38 @@ export default {
       sortKey: '',
       sortOrders: sortOrders,
       searchQueryFilters: [],
-      allOpportunities: [],
+      Opportunities: [],
       usersOnFeed: [
         // {name: 'Caleb Jones', status: 'is going'},
         // {name: 'Michael J. Foxworthy', status: 'is interested'},
         // {name: 'Joseph Smith', status: 'volunteered'},
         // {name: 'Michael Johnson', status: 'donated'}
 
-      ]
+      ],
+      allResponses: [],
+      selected: []
+      // showResponsesActive: false
+    }
+  },
+  apollo: {
+    // The name of this variable must equal to the name of back-end API function
+    allOpportunities: {
+      query: ALL_OPPORTUNITIES_QUERY,
+      result ({ data }) {
+        // Creates clone of data because Apollo data is read only
+        this.Opportunities = JSON.parse(JSON.stringify(data.allOpportunities))
+      }
+    },
+    allResponses: {
+      query: ALL_RESPONSES_QUERY
     }
   },
   computed: {
     filteredData: function () {
+      console.log('Responses', this.allResponses)
+      console.log('Opportunities', this.allOpportunities)
       let filters = JSON.parse(JSON.stringify(this.$store.state.searchQueryFilters))
-      let data = this.allOpportunities
+      let data = this.Opportunities
       let userId = localStorage.getItem('graphcool-user-id')
       // Removes case sensitivity
       var keywords = filters.keywords && filters.keywords.toLowerCase()
@@ -317,34 +353,74 @@ export default {
       if (date !== null) {
         return moment(date).format('MMMM Do YYYY, h:mm a')
       }
+    },
+    timeAgo: function (date) {
+      let now = new Date()
+      if (date !== null) {
+        return distanceInWords(date, now) + ' ago'
+      }
     }
   },
   methods: {
+    showResponses (item) {
+      item['showResponsesActive'] = !item.showResponsesActive
+      console.log('Response State', item.showResponsesActive)
+    },
+    // showResponsesActive (item) {
+    //   return item.showResponsesActive
+    // },
     getName (firstName, lastName) {
       return `${firstName} ${lastName}`
     },
-    interested (opportunity) {
+    isInterested (opportunity) {
       let userId = localStorage.getItem('graphcool-user-id')
-      // Creates an array of user.ids
-      let interestedUsersIds = opportunity.interestedUsers.map(x => {
-        return x.id
-      })
-      // Only add user to interestedUsers array if they are not already on it
-      if (!interestedUsersIds.includes(userId)) {
+      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
+      if (response) {
+        return response.type === 'Interested'
+      } else {
+        return false
+      }
+    },
+    isGoing (opportunity) {
+      let userId = localStorage.getItem('graphcool-user-id')
+      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
+      if (response) {
+        return response.type === 'Going'
+      }
+      return false
+    },
+    hasResponded (opportunity) {
+      let userId = localStorage.getItem('graphcool-user-id')
+      let index = opportunity.responses.findIndex(x => x.ownedBy.id === userId)
+      return index !== -1
+    },
+    response (opportunity, type) {
+      let userId = localStorage.getItem('graphcool-user-id')
+      // Check to see if user has responded yet
+      let index = opportunity.responses.findIndex(x => x.ownedBy.id === userId)
+      // If user has not already responded create Reponse object
+      if (index === -1) {
         this.$apollo.mutate({
-          mutation: ADD_INTEREST_TO_OPPORTUNITIES_MUTATION,
+          mutation: CREATE_RESPONSE_MUTATION,
           variables: {
-            interestedUsersUserId: userId,
-            interestedOpportunitiesOpportunityId: opportunity.id
+            type: type,
+            ownedById: userId,
+            opportunityId: opportunity.id
           },
-          update: (store, { data: { updateOpportunity } }) => {
+          update: (store, { data: { createResponse } }) => {
             // Pull data from the store
-            let user = this.$store.state.auth.user
             let data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
-            // Replace the object in the store with the updated version
+            // Create a local version of the object
+            let user = this.$store.state.auth.user
+            console.log('Update Data', createResponse)
+            createResponse['type'] = type
+            createResponse['ownedBy'] = user
+            createResponse['opportunityId'] = opportunity.id
+            createResponse['createdAt'] = new Date()
+            // Add the object to the query
             let index = data.allOpportunities.findIndex(x => x.id === opportunity.id)
             if (index !== -1) {
-              data.allOpportunities[index].interestedUsers.push({id: opportunity.id, firstName: user.firstName, lastName: user.lastName, __typename: 'User'})
+              data.allOpportunities[index].responses.push(createResponse)
             }
             // Write new data back to the store
             store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
@@ -352,42 +428,36 @@ export default {
         })
       }
     },
-    going (opportunity) {
-      console.log('Test', opportunity.goingUsers)
-      console.log('Test', opportunity.interestedUsers)
+    undo (opportunity) {
+      let response = {}
       let userId = localStorage.getItem('graphcool-user-id')
-      // Creates an array of user.ids
-      let goingUsersIds = opportunity.goingUsers.map(x => {
-        return x.id
-      })
-      // Only add user to interestedUsers array if they are not already on it
-      if (!goingUsersIds.includes(userId)) {
+      // Check if user has responded
+      if (this.hasResponded(opportunity)) {
+        // Find response by userId
+        response = opportunity.responses.find(x => x.ownedBy.id === userId)
         this.$apollo.mutate({
-          mutation: ADD_GOING_TO_OPPORTUNITIES_MUTATION,
+          mutation: DELETE_RESPONSE_MUTATION,
           variables: {
-            userId: userId,
-            opportunityId: opportunity.id
+            id: response.id
           },
-          update: (store, { data: { updateOpportunity } }) => {
-            // Pull data from the store
-            let user = this.$store.state.auth.user
-            let data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
-            // Replace the object in the store with the updated version
-            let index = data.allOpportunities.findIndex(x => x.id === opportunity.id)
+          update: (cache, { data: { deleteResponse } }) => {
+            // For some reason when the data is coming from the store, the response has already been deleted
+            // Not sure what is causing this
+            let { allOpportunities } = cache.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+            // Find index of Opportunity in store
+            let storedOpportunity = allOpportunities.find(x => x.id === opportunity.id)
+            console.log('Stored Opportunity', storedOpportunity)
+
+            let index = storedOpportunity.responses.findIndex(x => x.id === response.id)
             if (index !== -1) {
-              data.allOpportunities[index].goingUsers.push({id: opportunity.id, firstName: user.firstName, lastName: user.lastName, __typename: 'User'})
+              storedOpportunity.responses.splice(index, 1)
             }
+            console.log('Stored Opportunity Edit', storedOpportunity)
             // Write new data back to the store
-            store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+            cache.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: { allOpportunities: allOpportunities } })
           }
         })
       }
-    }
-  },
-  apollo: {
-    // The name of this variable must equal to the name of back-end API function
-    allOpportunities: {
-      query: ALL_OPPORTUNITIES_QUERY
     }
   }
 }
@@ -602,8 +672,16 @@ button {
     margin-left: 1vh;
   }
 }
-
+.active {
+  background-color: var(--background-color1);
+}
 button:hover {
   background-color: lightgray;
+}
+.toggle {
+  border: none;
+}
+.toggle:hover {
+  background-color: var(--background-color2);
 }
 </style>
