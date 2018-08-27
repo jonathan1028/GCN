@@ -300,29 +300,17 @@ export default {
       }
       if (filters.interested) {
         data = data.filter(function (item) {
-          // Creates an array of interestedUsersIds
-          let interestedUsersIds = item.interestedUsers.map(x => {
-            return x.id
-          })
-          return interestedUsersIds.includes(userId)
+          return item.responses.find(x => x.ownedBy.id === userId && x.type === 'Interested')
         })
       }
       if (filters.going) {
         data = data.filter(function (item) {
-          // Creates an array of interestedUsersIds
-          let goingUsersIds = item.goingUsers.map(x => {
-            return x.id
-          })
-          return goingUsersIds.includes(userId)
+          return item.responses.find(x => x.ownedBy.id === userId && x.type === 'Going')
         })
       }
       if (filters.attended) {
         data = data.filter(function (item) {
-          // Creates an array of interestedUsersIds
-          let attendedUsersIds = item.attendedUsers.map(x => {
-            return x.id
-          })
-          return attendedUsersIds.includes(userId)
+          return item.responses.find(x => x.ownedBy.id === userId && x.type === 'Attended')
         })
       }
       if (keywords) {
