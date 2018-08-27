@@ -82,6 +82,7 @@
           </div>
           <button
             class="button4"
+            v-bind:class="{ active: attended(item) }"
           >
             <icon
               class="icon"
@@ -89,7 +90,7 @@
             ></icon>
             <div
               class="button-text"
-              @click="toggleCreateVolunteeringLog()"
+              @click="toggleCreateVolunteeringLog(item)"
             >
               Log Time
             </div>
@@ -353,8 +354,9 @@ export default {
     }
   },
   methods: {
-    toggleCreateVolunteeringLog () {
+    toggleCreateVolunteeringLog (opportunity) {
       // console.log('button pushed')
+      this.$store.commit('updateSelectedOpportunity', opportunity)
       this.$store.commit('toggleCreateVolunteeringLog')
     },
     showResponses (item) {
@@ -381,6 +383,14 @@ export default {
       let response = opportunity.responses.find(x => x.ownedBy.id === userId)
       if (response) {
         return response.type === 'Going'
+      }
+      return false
+    },
+    attended (opportunity) {
+      let userId = localStorage.getItem('graphcool-user-id')
+      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
+      if (response) {
+        return response.type === 'Attended'
       }
       return false
     },

@@ -60,7 +60,7 @@
 
 <script>
 import Datepicker from 'vuejs-datepicker'
-import { CREATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
+import { ALL_OPPORTUNITIES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION, CREATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
 import { GC_USER_ID } from '../../../constants/settings'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -89,7 +89,7 @@ export default {
     cancel () {
       this.$store.commit('toggleCreateVolunteeringLog')
     },
-    create () {
+    create (opportunity) {
       // Checks permissions
       const currentUser = localStorage.getItem(GC_USER_ID)
       if (!currentUser) {
@@ -121,6 +121,95 @@ export default {
       }).then((result) => {
         console.log('Test Ressult', result)
         this.$store.dispatch('createNotification', `Volunteering time logged for ${this.title}`)
+        // create response
+        let userId = localStorage.getItem('graphcool-user-id')
+        let opportunity = this.$store.state.selectedOpportunity
+        let type = 'Attended'
+        // Check to see if user has responded yet
+        let response = opportunity.responses.find(x => x.ownedBy.id === userId)
+        console.log('Response', response)
+
+        if (response && response.type !== type) {
+          this.$apollo.mutate({
+            mutation: DELETE_RESPONSE_MUTATION,
+            variables: {
+              id: response.id
+            },
+            update: (cache, { data: { deleteResponse } }) => {
+              // For some reason when the data is coming from the store, the response has already been deleted
+              // Not sure what is causing this
+              let { allOpportunities } = cache.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+              // Find index of Opportunity in store
+              let storedOpportunity = allOpportunities.find(x => x.id === opportunity.id)
+              console.log('Stored Opportunity', storedOpportunity)
+
+              let index = storedOpportunity.responses.findIndex(x => x.id === response.id)
+              if (index !== -1) {
+                storedOpportunity.responses.splice(index, 1)
+              }
+              console.log('Stored Opportunity Edit', storedOpportunity)
+              // Write new data back to the store
+              cache.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: { allOpportunities: allOpportunities } })
+            }
+          }).then((data) => {
+            this.$apollo.mutate({
+              mutation: CREATE_RESPONSE_MUTATION,
+              variables: {
+                type: type,
+                ownedById: userId,
+                opportunityId: opportunity.id
+              },
+              update: (store, { data: { createResponse } }) => {
+                // Pull data from the store
+                let data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+                // Create a local version of the object
+                let user = this.$store.state.auth.user
+                console.log('Update Data', createResponse)
+                createResponse['type'] = type
+                createResponse['ownedBy'] = user
+                createResponse['opportunityId'] = opportunity.id
+                createResponse['createdAt'] = new Date()
+                // Add the object to the query
+                let index = data.allOpportunities.findIndex(x => x.id === opportunity.id)
+                if (index !== -1) {
+                  data.allOpportunities[index].responses.push(createResponse)
+                }
+                // Write new data back to the store
+                store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+              }
+            })
+          })
+        }
+
+        // If user has not yet responded create Reponse object
+        if (!response) {
+          this.$apollo.mutate({
+            mutation: CREATE_RESPONSE_MUTATION,
+            variables: {
+              type: type,
+              ownedById: userId,
+              opportunityId: opportunity.id
+            },
+            update: (store, { data: { createResponse } }) => {
+              // Pull data from the store
+              let data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+              // Create a local version of the object
+              let user = this.$store.state.auth.user
+              console.log('Update Data', createResponse)
+              createResponse['type'] = type
+              createResponse['ownedBy'] = user
+              createResponse['opportunityId'] = opportunity.id
+              createResponse['createdAt'] = new Date()
+              // Add the object to the query
+              let index = data.allOpportunities.findIndex(x => x.id === opportunity.id)
+              if (index !== -1) {
+                data.allOpportunities[index].responses.push(createResponse)
+              }
+              // Write new data back to the store
+              store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+            }
+          })
+        }
       })
       this.$store.commit('toggleCreateVolunteeringLog')
     }

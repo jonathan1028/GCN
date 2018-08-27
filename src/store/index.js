@@ -43,7 +43,8 @@ const store = new Vuex.Store({
       interested: false,
       going: false,
       attended: false
-    }
+    },
+    selectedOpportunity: {}
   },
 
   getters: {
@@ -91,6 +92,10 @@ const store = new Vuex.Store({
     },
     updateNotificationType (state, data) {
       state.notificationType = data
+    },
+    updateSelectedOpportunity (state, data) {
+      state.selectedOpportunity = JSON.parse(JSON.stringify(data))
+      console.log('Selected Opportunity Set', state.selectedOpportunity)
     }
   },
   actions: {
