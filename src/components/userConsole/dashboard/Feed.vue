@@ -397,9 +397,63 @@ export default {
     response (opportunity, type) {
       let userId = localStorage.getItem('graphcool-user-id')
       // Check to see if user has responded yet
-      let index = opportunity.responses.findIndex(x => x.ownedBy.id === userId)
-      // If user has not already responded create Reponse object
-      if (index === -1) {
+      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
+      console.log('Response', response)
+
+      if (response && response.type !== type) {
+        this.$apollo.mutate({
+          mutation: DELETE_RESPONSE_MUTATION,
+          variables: {
+            id: response.id
+          },
+          update: (cache, { data: { deleteResponse } }) => {
+            // For some reason when the data is coming from the store, the response has already been deleted
+            // Not sure what is causing this
+            let { allOpportunities } = cache.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+            // Find index of Opportunity in store
+            let storedOpportunity = allOpportunities.find(x => x.id === opportunity.id)
+            console.log('Stored Opportunity', storedOpportunity)
+
+            let index = storedOpportunity.responses.findIndex(x => x.id === response.id)
+            if (index !== -1) {
+              storedOpportunity.responses.splice(index, 1)
+            }
+            console.log('Stored Opportunity Edit', storedOpportunity)
+            // Write new data back to the store
+            cache.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: { allOpportunities: allOpportunities } })
+          }
+        }).then((data) => {
+          this.$apollo.mutate({
+            mutation: CREATE_RESPONSE_MUTATION,
+            variables: {
+              type: type,
+              ownedById: userId,
+              opportunityId: opportunity.id
+            },
+            update: (store, { data: { createResponse } }) => {
+              // Pull data from the store
+              let data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+              // Create a local version of the object
+              let user = this.$store.state.auth.user
+              console.log('Update Data', createResponse)
+              createResponse['type'] = type
+              createResponse['ownedBy'] = user
+              createResponse['opportunityId'] = opportunity.id
+              createResponse['createdAt'] = new Date()
+              // Add the object to the query
+              let index = data.allOpportunities.findIndex(x => x.id === opportunity.id)
+              if (index !== -1) {
+                data.allOpportunities[index].responses.push(createResponse)
+              }
+              // Write new data back to the store
+              store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+            }
+          })
+        })
+      }
+
+      // If user has not yet responded create Reponse object
+      if (!response) {
         this.$apollo.mutate({
           mutation: CREATE_RESPONSE_MUTATION,
           variables: {
@@ -429,6 +483,7 @@ export default {
       }
     },
     undo (opportunity) {
+      console.log('Undo function ran')
       let response = {}
       let userId = localStorage.getItem('graphcool-user-id')
       // Check if user has responded
