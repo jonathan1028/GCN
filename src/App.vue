@@ -15,7 +15,7 @@ export default {
 // @import "../assets/scss/style.scss";
 // @import "../assets/scss/main.scss";
 
-@import "../assets/global.scss";
+@import "./assets/global.scss";
 /* ------------------------ Application Padding, Margin, & Background --------------- */
 /* Removes default margin and padding for all html elements */
 * { margin: 0; padding: 0; }

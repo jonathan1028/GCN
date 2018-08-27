@@ -206,8 +206,8 @@
 <script>
 import { GET_USER_QUERY, UPDATE_USER_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
 import moment from 'moment'
-import CreateVolunteeringLog from './CreateVolunteeringLog'
-import UpdateVolunteeringLog from './UpdateVolunteeringLog'
+import CreateVolunteeringLog from '../modals/CreateVolunteeringLog'
+import UpdateVolunteeringLog from '../modals/UpdateVolunteeringLog'
 import { format, differenceInMinutes } from 'date-fns'
 
 export default {

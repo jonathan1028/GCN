@@ -87,7 +87,10 @@
               class="icon"
               name="regular/clock"
             ></icon>
-            <div class="button-text">
+            <div
+              class="button-text"
+              @click="toggleCreateVolunteeringLog()"
+            >
               Log Time
             </div>
           </button>
@@ -350,6 +353,10 @@ export default {
     }
   },
   methods: {
+    toggleCreateVolunteeringLog () {
+      // console.log('button pushed')
+      this.$store.commit('toggleCreateVolunteeringLog')
+    },
     showResponses (item) {
       item['showResponsesActive'] = !item.showResponsesActive
       console.log('Response State', item.showResponsesActive)

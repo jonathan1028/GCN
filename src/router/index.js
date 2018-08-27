@@ -1,21 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+// Public Pages
 import PublicHeader from '../components/public/PublicHeader'
 import Login from '../components/public/Login'
 import SignUp from '../components/public/SignUp'
 import Home from '@/components/public/Home'
 
+// Organization Console
+import MyOpportunitiesPage from '../components/organizationConsole/volunteerOpportunities/MyOpportunitiesPage'
+
+// User Console
 import UserConsoleHeader from '../components/userConsole/UserConsoleHeader'
-// import People from '../components/userConsole/People/People'
-// import ReadPerson from '../components/userConsole/People/ReadPerson'
-// import UpdatePerson from '../components/userConsole/People/UpdatePerson'
+import FeedPage from '../components/userConsole/pages/FeedPage'
+import ProfilePage from '../components/userConsole/pages/ProfilePage'
+import NotificationsPage from '../components/userConsole/pages/NotificationsPage'
 
-import UserDashboard from '../components/userConsole/dashboard/UserDashboard'
-import MyOpportunitiesPage from '../components/userConsole/volunteerOpportunities/MyOpportunitiesPage'
-import ProfilePage from '../components/userConsole/profile/ProfilePage'
-import NotificationsPage from '../components/userConsole/notifications/NotificationsPage'
-
+// Admin Console
 import AdminHeader from '../components/admin/AdminHeader'
 import Admin from '../components/admin/Admin'
 import UpdateUser from '../components/admin/UpdateUser'
@@ -73,7 +74,7 @@ const router = new Router({
       children: [
         {
           path: '/feed',
-          component: UserDashboard,
+          component: FeedPage,
           meta: {
             requiresAuth: true
           }

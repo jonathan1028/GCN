@@ -1,5 +1,5 @@
 <template>
-  <div class="modal _box-shadow">
+  <div class="modal _box-shadow1">
     <div class="modal-header">
       <h2>Add Volunteering Hours</h2>
     </div>
@@ -130,19 +130,20 @@ export default {
 
 <style lang="scss" scoped>
 .modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    //left: 0;
-    top: 20vh;
-    width: auto; /* Full width */
-    height: auto; /* Full height */
-    margin: auto;
-    padding: 5vh;
-    // overflow: auto; /* Enable scroll if needed */
-    opacity: 1;
-    background-color: #fefefe;
-    animation-name: animatetop;
-    animation-duration: 0.4s
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 24vw;
+  top: 15vh;
+  width: 45vw; /* Full width */
+  height: auto; /* Full height */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5vh;
+  // overflow: auto; /* Enable scroll if needed */
+  opacity: 1;
+  background-color: #fefefe;
+  animation-name: animatetop;
+  animation-duration: 0.4s
 }
 .close-button {
     color: #aaa;

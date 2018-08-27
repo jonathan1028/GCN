@@ -9,6 +9,20 @@
       ></search>
     </div>
     <div>
+      <!------------------------------------------       Modals ------------------------------------ -->
+      <div class="modal-area">
+        <!------------------------------------------ Create Medallion Modal ------------------------- -->
+          <span v-if="this.$store.state.showCreateMedallionModal">
+            <create-medallion
+              class="create-medallion-component"
+            ></create-medallion>
+          </span>
+        <!------------------------------------------ Create Volunteering Log Modal ------------ -->
+          <span v-if="this.$store.state.showCreateVolunteeringLog">
+            <create-volunteering-log></create-volunteering-log>
+          </span>
+      </div>
+      <!------------------------------------------ End of Modal Content  ---------------------------- -->
       <carousel></carousel>
       <feed
         class="feed-component"
@@ -20,30 +34,24 @@
     <div>
       <button-menu></button-menu>
     </div>
-    <!------------------------------------------ Modal- Create Medallion  ------------------------- -->
-      <span v-if="this.$store.state.showCreateMedallionModal">
-        <create-medallion
-          class="create-medallion-component"
-        ></create-medallion>
-      </span>
-    <!------------------------------------------ End of Modal Content  ---------------------------- -->
   </div>
 </template>
 
 <script>
-import Feed from './Feed'
-import Search from './Search'
-import CreateMedallion from './CreateMedallion'
-import NotificationsBox from './NotificationsBox'
-import Carousel from './Carousel'
-import ButtonMenu from './ButtonMenu'
+import Feed from '../modules/Feed'
+import Search from '../modules/Search'
+import CreateMedallion from '../modals/CreateMedallion'
+import NotificationsBox from '../modules/NotificationsBox'
+import Carousel from '../modules/Carousel'
+import ButtonMenu from '../modules/ButtonMenu'
+import CreateVolunteeringLog from '../modals/CreateVolunteeringLog'
 import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
 // import CreateOpportunity from './CreateOpportunity'
 
 export default {
   name: 'FeedPage',
   components: {
-    Feed, Search, NotificationsBox, CreateMedallion, Carousel, ButtonMenu
+    Feed, Search, NotificationsBox, CreateMedallion, Carousel, ButtonMenu, CreateVolunteeringLog
   },
   data () {
     return {
@@ -91,7 +99,7 @@ export default {
   grid-area: feed-component;
 }
 
-.create-medallion-component {
+.modal-area {
   grid-area: center-column;
 }
 
