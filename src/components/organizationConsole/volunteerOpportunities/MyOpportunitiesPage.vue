@@ -37,7 +37,7 @@
 
 <script>
 // import Feed from './Feed'
-import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
+import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
 import CreateOpportunity from './CreateOpportunity'
 import UpdateOpportunity from './UpdateOpportunity'
 import MyOpportunities from './MyOpportunities'

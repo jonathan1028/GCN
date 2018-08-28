@@ -61,7 +61,7 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 // import { CREATE_PERSON_MUTATION } from '../constants/graphql'
-import { UPDATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
+import { UPDATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql/volunteering-logs'
 import { GC_USER_ID } from '../../../constants/settings'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'

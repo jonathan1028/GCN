@@ -22,7 +22,7 @@
 <script>
 import UserTable from './UserTable'
 import MedallionsIssuedTable from './MedallionsIssuedTable'
-import { ALL_USERS_QUERY } from '../../constants/graphql'
+import { ALL_USERS_QUERY } from '../../constants/graphql/users'
 // import { ALL_PEOPLE_QUERY, NEW_PEOPLE_SUBSCRIPTION } from '../constants/graphql'
 
 export default {

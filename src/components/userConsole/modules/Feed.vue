@@ -185,7 +185,8 @@
 <script>
 // import 'font-awesome/css/font-awesome.css'
 // import { ALL_USERS_QUERY } from '../../../constants/graphql'
-import { ALL_RESPONSES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION, ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
+import { ALL_RESPONSES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION } from '../../../constants/graphql/responses'
+import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
 import moment from 'moment'
 import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth, distanceInWords } from 'date-fns'
 

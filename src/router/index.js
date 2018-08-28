@@ -17,13 +17,13 @@ import ProfilePage from '../components/userConsole/pages/ProfilePage'
 import NotificationsPage from '../components/userConsole/pages/NotificationsPage'
 
 // Admin Console
-import AdminHeader from '../components/admin/AdminHeader'
-import Admin from '../components/admin/Admin'
-import UpdateUser from '../components/admin/UpdateUser'
-import ReadUser from '../components/admin/ReadUser'
-import NewUsers from '../components/admin/NewUsers'
+import AdminHeader from '../components/adminConsole/AdminHeader'
+import Admin from '../components/adminConsole/Admin'
+import UpdateUser from '../components/adminConsole/UpdateUser'
+import ReadUser from '../components/adminConsole/ReadUser'
+import NewUsers from '../components/adminConsole/NewUsers'
 import { GC_USER_ID } from '../constants/settings'
-import UsersMedallionsTable from '../components/admin/UsersMedallionsTable'
+import UsersMedallionsTable from '../components/adminConsole/UsersMedallionsTable'
 
 let userId = localStorage.getItem(GC_USER_ID)
 

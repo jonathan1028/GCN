@@ -95,44 +95,11 @@
           </div>
         </div>
         <!-- --------------------------------------------- Volunteer Preferences ----------------------- -->
-        <div class="panel"
+        <div
+          class="panel"
           v-if="activeTab === 'volunteerPreferences'"
         >
-          <div class="field">
-            <label for="">Location:</label>
-            <input
-              v-model="User.volunteeringLocation"
-              type="text"
-              placeholder="">
-          </div>
-          <div class="field">
-            <label for="">Frequency:</label>
-            <input
-              v-model="User.volunteeringFrequency"
-              type="text"
-              placeholder="">
-          </div>
-          <div class="field">
-            <label for="">Receive Emails:</label>
-            <input
-              v-model="User.receiveVolunteeringEmails"
-              type="text"
-              placeholder="">
-          </div>
-          <div class="field">
-            <label for="">Volunteer Interest:</label>
-            <input
-              v-model="User.volunteerInterest"
-              type="text"
-              placeholder="">
-          </div>
-          <div class="field">
-            <label for="">Keyword:</label>
-            <input
-              v-model="keyword"
-              type="text"
-              placeholder="">
-          </div>
+          <user-volunteer-preferences></user-volunteer-preferences>
         </div>
         <!-- --------------------------------------------- Volunteer Logging ----------------------- -->
         <div
@@ -204,16 +171,18 @@
 </template>
 
 <script>
-import { GET_USER_QUERY, UPDATE_USER_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
+import { GET_USER_QUERY, UPDATE_USER_MUTATION } from '../../../constants/graphql/users'
+import { ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql/volunteering-logs'
 import moment from 'moment'
 import CreateVolunteeringLog from '../modals/CreateVolunteeringLog'
 import UpdateVolunteeringLog from '../modals/UpdateVolunteeringLog'
+import UserVolunteerPreferences from '../modules/UserVolunteerPreferences'
 import { format, differenceInMinutes } from 'date-fns'
 
 export default {
   name: 'ProfilePage',
   components: {
-    CreateVolunteeringLog, UpdateVolunteeringLog
+    CreateVolunteeringLog, UpdateVolunteeringLog, UserVolunteerPreferences
   },
   data () {
     return {

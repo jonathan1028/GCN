@@ -45,7 +45,7 @@ import NotificationsBox from '../modules/NotificationsBox'
 import Carousel from '../modules/Carousel'
 import ButtonMenu from '../modules/ButtonMenu'
 import CreateVolunteeringLog from '../modals/CreateVolunteeringLog'
-import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql'
+import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
 // import CreateOpportunity from './CreateOpportunity'
 
 export default {

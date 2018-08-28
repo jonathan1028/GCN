@@ -54,7 +54,8 @@
 </template>
 
 <script>
-import { CREATE_MEDALLION_MUTATION, GET_USER_QUERY } from '../../../constants/graphql'
+import { CREATE_MEDALLION_MUTATION } from '../../../constants/graphql/medallions'
+import { GET_USER_QUERY } from '../../../constants/graphql/users'
 
 export default {
   name: 'CreateMedallionModal',

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { ALL_NOTIFICATIONS_QUERY } from '../../../constants/graphql'
+import { ALL_NOTIFICATIONS_QUERY } from '../../../constants/graphql/notifications'
 import NotificationsBox from '../modules/NotificationsBox'
 import { format } from 'date-fns'
 console.log('UserId', localStorage.getItem('graphcool-user-id'))

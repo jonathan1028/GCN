@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
 import VuexPersistence from 'vuex-persist'
-import { CREATE_NOTIFICATION_MUTATION, ALL_NOTIFICATIONS_QUERY } from '../constants/graphql'
+import { CREATE_NOTIFICATION_MUTATION, ALL_NOTIFICATIONS_QUERY } from '../constants/graphql/notifications'
 import apolloClient from '../apollo-client'
 
 Vue.use(Vuex)

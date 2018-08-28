@@ -60,7 +60,10 @@
 
 <script>
 import Datepicker from 'vuejs-datepicker'
-import { ALL_OPPORTUNITIES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION, CREATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql'
+import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
+import { CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION } from '../../../constants/graphql/responses'
+import { CREATE_VOLUNTEERING_LOG_MUTATION, ALL_VOLUNTEERING_LOGS_QUERY } from '../../../constants/graphql/volunteering-logs'
+
 import { GC_USER_ID } from '../../../constants/settings'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'

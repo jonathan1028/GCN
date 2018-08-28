@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 13
+# version: 17
 
 type User @model {
   id: ID! @isUnique
@@ -22,6 +22,7 @@ type User @model {
   attendedOpportunities: [Opportunity!]! @relation(name: "AttendedOpportunities")
   organizations: [Organization!]! @relation(name: "OrgsPersonnel")
   responses: [Response!]! @relation(name: "UserResponses")
+  preferences: Preferences @relation(name: "UserPreferences")
 }
 
 type File @model {
@@ -104,6 +105,18 @@ type Response @model {
   type: String
   ownedBy: User @relation(name: "UserResponses")
   opportunity: Opportunity @relation(name: "OpportunityResponses")
+}
+
+type Preferences @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  opportunitiesLocationRemote: Boolean
+  opportunitiesLocationOnsite: Boolean
+  opportunitiesOneTime: Boolean
+  opportunitiesRecurring: Boolean
+  opportunitiesEmailFrequency: String
+  ownedBy: User @relation(name: "UserPreferences")
 }
 
 type Organization @model {

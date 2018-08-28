@@ -51,7 +51,7 @@
 
 <script>
 // import { ALL_USERS_QUERY } from '../../../constants/graphql'
-import { UPDATE_OPPORTUNITY_MUTATION, ALL_OPPORTUNITIES_QUERY, DELETE_OPPORTUNITY_MUTATION } from '../../../constants/graphql'
+import { UPDATE_OPPORTUNITY_MUTATION, ALL_OPPORTUNITIES_QUERY, DELETE_OPPORTUNITY_MUTATION } from '../../../constants/graphql/opportunities'
 // import { USERS_ON_FEED_QUERY } from '../../../constants/graphql'
 import moment from 'moment'
 

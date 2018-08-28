@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { ALL_USERS_QUERY } from '../../constants/graphql'
+import { ALL_USERS_QUERY } from '../../constants/graphql/users'
 // import { GC_USER_ID } from '../../constants/settings'
 
 export default {
