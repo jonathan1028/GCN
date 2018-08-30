@@ -21,6 +21,9 @@ import AdminHeader from '../components/adminConsole/AdminHeader'
 import AdminDashboardPage from '../components/adminConsole/pages/AdminDashboardPage'
 import AdminUsersPage from '../components/adminConsole/pages/AdminUsersPage'
 import AdminOrgsPage from '../components/adminConsole/pages/AdminOrgsPage'
+import AdminOpportunitiesPage from '../components/adminConsole/pages/AdminOpportunitiesPage'
+import AdminMedallionsPage from '../components/adminConsole/pages/AdminMedallionsPage'
+import AdminResponsesPage from '../components/adminConsole/pages/AdminResponsesPage'
 import UserUpdate from '../components/adminConsole/modules/UserUpdate'
 import UserRead from '../components/adminConsole/modules/UserRead'
 import NewUsers from '../components/adminConsole/modules/NewUsers'
@@ -107,46 +110,32 @@ const router = new Router({
     },
     // ------------------------------------------ Admin ----------------------------------
     {
-      path: '/',
+      path: '/admin',
       component: AdminHeader,
       children: [
         {
-          path: '/dashboard',
+          path: 'dashboard',
           component: AdminDashboardPage,
           meta: {
             requiresAuth: true
           }
         },
         {
-          path: '/users',
+          path: 'users',
           component: AdminUsersPage,
           meta: {
             requiresAuth: true
           }
         },
         {
-          path: '/organizations',
-          component: AdminOrgsPage,
-          meta: {
-            requiresAuth: true
-          }
-        },
-        {
-          path: '/newusers',
-          component: NewUsers,
-          meta: {
-            requiresAuth: true
-          }
-        },
-        {
-          path: '/user/:id',
+          path: 'user/:id',
           component: UserRead,
           meta: {
             requiresAuth: true
           }
         },
         {
-          path: '/user/update/:id',
+          path: 'user/update/:id',
           component: UserUpdate,
           name: 'updateUser',
           meta: {
@@ -154,7 +143,42 @@ const router = new Router({
           }
         },
         {
-          path: '/user/:id/medallions/',
+          path: 'organizations',
+          component: AdminOrgsPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'opportunities',
+          component: AdminOpportunitiesPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'medallions',
+          component: AdminMedallionsPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'responses',
+          component: AdminResponsesPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'newusers',
+          component: NewUsers,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'user/:id/medallions/',
           component: UsersMedallionsTable,
           name: 'usersMedallions',
           meta: {
@@ -162,7 +186,7 @@ const router = new Router({
           }
         },
         {
-          path: '/medallion/:id',
+          path: 'medallion/:id',
           component: UserRead,
           meta: {
             requiresAuth: true

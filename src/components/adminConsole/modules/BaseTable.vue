@@ -21,31 +21,34 @@
       </thead>
       <tbody>
         <tr
-          v-for='(entry, index) in filteredData'
+          v-for='(row, index) in filteredData'
           :key='index'
           :index="index"
         >
           <td v-for='(col, index) in columns'
             :key='index'
             :index="index"
-            @click="viewUser(entry)"
+            @click="view(row)"
           >
           <div v-if="col.dbField === 'createdAt'">
-            <span>{{entry[col.dbField] | formatDate}}</span>
+            <span>{{row[col.dbField] | formatDate}}</span>
           </div>
           <div v-else-if="col.dbField === 'updatedAt'">
-            <span>{{entry[col.dbField] | relativeTime}}</span>
+            <span>{{row[col.dbField] | relativeTime}}</span>
+          </div>
+          <div v-else-if="col.dbField === 'ownedBy'">
+            <span>{{ getName(row[col.dbField]) }}</span>
           </div>
           <div v-else>
-            {{entry[col.dbField]}}
+            {{row[col.dbField]}}
           </div>
           </td>
           <td>
             <button
-              @click="updateUser(entry)"
+              @click="update(row)"
             >Edit</button>
             <button
-              @click="deleteUser(entry)"
+              @click="deleteObject(row)"
             >Delete</button>
           </td>
         </tr>
@@ -106,6 +109,9 @@ export default {
     }
   },
   methods: {
+    getName (owner) {
+      return owner.firstName + ' ' + owner.lastName
+    },
     isCreatedAt: function (field) {
       if (field === 'createdAt') {
         return true
@@ -124,16 +130,19 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    viewUser: function (user) {
-      localStorage.setItem('user', JSON.stringify(user))
-      this.$router.push({path: `/user/${user.id}`})
+    view: function (obj) {
+      // Creates a dynamic path and stores to localStorage regardless of what type of object is passed in
+      let path = '/admin/' + obj.__typename.toLowerCase() + '/' + obj.id
+
+      localStorage.setItem(obj.__typename.toLowerCase(), JSON.stringify(obj))
+      this.$router.push({path: path})
     },
-    updateUser (user) {
+    update (user) {
       localStorage.setItem('user', JSON.stringify(user))
       console.log('test1', JSON.parse(localStorage.getItem('user')))
       this.$router.push({path: `/user/update/${user.id}`})
     },
-    deleteUser (obj) {
+    deleteObject (obj) {
       console.log('Object', obj)
       const currentUser = localStorage.getItem(GC_USER_ID)
       console.log('Object', currentUser)

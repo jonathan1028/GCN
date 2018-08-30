@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <h1>Users</h1>
+    <h1>Medallions</h1>
     <div>
       <form class="search">
         <input name="query" v-model="searchQuery" placeholder="Search">
@@ -16,14 +16,12 @@
 
 <script>
 import BaseTable from '../modules/BaseTable'
-import MedallionsIssuedTable from '../modules/MedallionsIssuedTable'
-import { ALL_USERS_QUERY } from '../../../constants/graphql/users'
-// import { ALL_PEOPLE_QUERY, NEW_PEOPLE_SUBSCRIPTION } from '../constants/graphql'
+import { ALL_MEDALLIONS_QUERY } from '../../../constants/graphql/medallions'
 
 export default {
-  name: 'AdminUsersPage',
+  name: 'AdminMedallionsPage',
   components: {
-    BaseTable, MedallionsIssuedTable
+    BaseTable
   },
   data () {
     return {
@@ -31,20 +29,18 @@ export default {
       sortColumn: '',
       searchQuery: '',
       columns: [
-        {dbField: 'firstName', title: 'first name'},
-        {dbField: 'lastName', title: 'last name'},
-        {dbField: 'email', title: 'email'},
-        {dbField: 'createdAt', title: 'createdAt'},
-        {dbField: 'updatedAt', title: 'updatedAt'}]
+        {dbField: 'id', title: 'id'},
+        {dbField: 'createdAt', title: 'createdAt'}
+      ]
     }
   },
   apollo: {
     // allUser here pulls the data from ALL_USERS_QUERY and assigns it to the data(){} object at the top of script
-    allUsers: {
-      query: ALL_USERS_QUERY,
+    allMedallions: {
+      query: ALL_MEDALLIONS_QUERY,
       result ({ data }) {
         // Sets variable query to the gql data for a more modular UI template
-        this.query = data.allUsers
+        this.query = data.allMedallions
       }
     }
   }

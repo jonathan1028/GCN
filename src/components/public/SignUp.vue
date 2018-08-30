@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="_box">
     <div class="companyName">Good Citizen Network</div>
     <div class="inputs">
       <div class="field">

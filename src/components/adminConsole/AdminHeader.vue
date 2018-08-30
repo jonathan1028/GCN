@@ -6,15 +6,19 @@
             <!-- Logo -->
             <div class="logo">GCN</div>
             <div class="nav-buttons">
-              <router-link to="/dashboard">Dashboard</router-link>
+              <router-link to="/admin/dashboard">Dashboard</router-link>
               <div>|</div>
-              <router-link to="/users">Users</router-link>
+              <router-link to="/admin/users">Users</router-link>
               <div>|</div>
-              <router-link to="/organizations">Organizations</router-link>
+              <router-link to="/admin/organizations">Organizations</router-link>
               <div>|</div>
-              <router-link to="/opportunities">Opportunities</router-link>
+              <router-link to="/admin/opportunities">Opportunities</router-link>
               <div>|</div>
-              <router-link to="/medallions">Medallions</router-link>
+              <router-link to="/admin/responses">Reponses</router-link>
+              <div>|</div>
+              <router-link to="/admin/medallions">Medallions</router-link>
+              <div>|</div>
+              <router-link to="/admin/createOrganization">Create Organization</router-link>
               <!-- Logged in navigation -->
               <!-- <div class="authenticated-nav" v-if="userId">
                 <router-link to="/people">People</router-link>

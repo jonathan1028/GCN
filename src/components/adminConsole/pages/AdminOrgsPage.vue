@@ -6,7 +6,7 @@
         <input name="query" v-model="searchQuery" placeholder="Search">
       </form>
       <base-table
-        :data="allOrganizations"
+        :data="query"
         :columns="columns"
         :filter-key="searchQuery">
       </base-table>
@@ -25,7 +25,7 @@ export default {
   },
   data () {
     return {
-      allOrganizations: [],
+      query: [],
       sortColumn: '',
       searchQuery: '',
       columns: [
@@ -38,7 +38,11 @@ export default {
   apollo: {
     // allUser here pulls the data from ALL_USERS_QUERY and assigns it to the data(){} object at the top of script
     allOrganizations: {
-      query: ALL_ORGANIZATIONS_QUERY
+      query: ALL_ORGANIZATIONS_QUERY,
+      result ({ data }) {
+        // Sets variable query to the gql data for a more modular UI template
+        this.query = data.allOrganizations
+      }
     }
   }
 }

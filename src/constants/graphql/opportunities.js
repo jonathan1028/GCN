@@ -24,21 +24,6 @@ export const ALL_OPPORTUNITIES_QUERY = gql`
           lastName
         }
       }
-      interestedUsers {
-        id
-        firstName
-        lastName
-      }
-      goingUsers {
-        id
-        firstName
-        lastName
-      }
-      attendedUsers {
-        id
-        firstName
-        lastName
-      }
     }
   }
 `
