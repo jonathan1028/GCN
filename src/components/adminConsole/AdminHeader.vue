@@ -6,11 +6,15 @@
             <!-- Logo -->
             <div class="logo">GCN</div>
             <div class="nav-buttons">
-              <router-link to="/feed">Feed</router-link>
+              <router-link to="/dashboard">Dashboard</router-link>
               <div>|</div>
-              <router-link to="/myopportunities">My Opportunities</router-link>
+              <router-link to="/users">Users</router-link>
               <div>|</div>
-              <router-link to="/admin">Admin</router-link>
+              <router-link to="/organizations">Organizations</router-link>
+              <div>|</div>
+              <router-link to="/opportunities">Opportunities</router-link>
+              <div>|</div>
+              <router-link to="/medallions">Medallions</router-link>
               <!-- Logged in navigation -->
               <!-- <div class="authenticated-nav" v-if="userId">
                 <router-link to="/people">People</router-link>
@@ -85,6 +89,8 @@ export default {
 }
 .main-content {
   margin-top: 8vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 .header{
   width: 100%;

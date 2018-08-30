@@ -11,6 +11,7 @@ type User @model {
   lastName: String
   birthYear: String
   phone: String
+  preferences: Preferences @relation(name: "UserPreferences")
   opportunities: [Opportunity!]! @relation(name: "UserOpportunities")
   volunteeringLogs: [VolunteeringLog!]! @relation(name: "UserVolunteeringLogs")
   notifications: [Notification!]! @relation(name: "UserNotifications")
@@ -22,7 +23,6 @@ type User @model {
   attendedOpportunities: [Opportunity!]! @relation(name: "AttendedOpportunities")
   organizations: [Organization!]! @relation(name: "OrgsPersonnel")
   responses: [Response!]! @relation(name: "UserResponses")
-  preferences: Preferences @relation(name: "UserPreferences")
 }
 
 type File @model {

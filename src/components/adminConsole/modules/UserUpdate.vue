@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { ALL_USERS_QUERY, UPDATE_USER_MUTATION } from '../../constants/graphql/users'
+import { ALL_USERS_QUERY, UPDATE_USER_MUTATION } from '../../../constants/graphql/users'
 
 export default {
   name: 'UpdateUser',

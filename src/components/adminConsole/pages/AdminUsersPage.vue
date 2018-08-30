@@ -1,34 +1,29 @@
 <template>
-  <div class="adminPage">
-    <div class="_box effect6">
-      <div class="_box-content">
-        <h1>Users</h1>
-        <div>
-          <form class="search">
-            <input name="query" v-model="searchQuery" placeholder="Search">
-          </form>
-          <user-table
-            :data="getData(allUsers)"
-            :columns="columns"
-            :filter-key="searchQuery">
-          </user-table>
-        </div>
-      </div>
-      <medallions-issued-table></medallions-issued-table>
+  <div class="page">
+    <h1>Users</h1>
+    <div>
+      <form class="search">
+        <input name="query" v-model="searchQuery" placeholder="Search">
+      </form>
+      <base-table
+        :data="getData(allUsers)"
+        :columns="columns"
+        :filter-key="searchQuery">
+      </base-table>
     </div>
   </div>
 </template>
 
 <script>
-import UserTable from './UserTable'
-import MedallionsIssuedTable from './MedallionsIssuedTable'
-import { ALL_USERS_QUERY } from '../../constants/graphql/users'
+import BaseTable from '../modules/BaseTable'
+import MedallionsIssuedTable from '../modules/MedallionsIssuedTable'
+import { ALL_USERS_QUERY } from '../../../constants/graphql/users'
 // import { ALL_PEOPLE_QUERY, NEW_PEOPLE_SUBSCRIPTION } from '../constants/graphql'
 
 export default {
-  name: 'Admin',
+  name: 'AdminUsersPage',
   components: {
-    UserTable, MedallionsIssuedTable
+    BaseTable, MedallionsIssuedTable
   },
   data () {
     return {
@@ -36,7 +31,6 @@ export default {
       sortColumn: '',
       searchQuery: '',
       columns: [
-        {dbField: 'id', title: 'id'},
         {dbField: 'firstName', title: 'first name'},
         {dbField: 'lastName', title: 'last name'},
         {dbField: 'email', title: 'email'},
@@ -59,7 +53,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.page {
+  padding: 3vh;
+  background-color: white;
+}
 .search{
   width: 38%;
 }

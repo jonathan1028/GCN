@@ -1,9 +1,5 @@
 <template>
-  <div class="_box-content">
-    <h1>Medallions Issued</h1>
-    <form class="search">
-      <input name="query" v-model="searchQuery" placeholder="Search">
-    </form>
+  <div class="component">
     <table>
       <thead>
         <tr>
@@ -25,101 +21,72 @@
       </thead>
       <tbody>
         <tr
-          v-for='(object, index) in filteredData'
+          v-for='(entry, index) in filteredData'
           :key='index'
           :index="index"
         >
           <td v-for='(col, index) in columns'
             :key='index'
             :index="index"
-            @click="viewModel(object)"
+            @click="viewUser(entry)"
           >
           <div v-if="col.dbField === 'createdAt'">
-            <span>{{object[col.dbField] | formatDate}}</span>
+            <span>{{entry[col.dbField] | formatDate}}</span>
           </div>
-          <div v-else-if="col.dbField === 'ownedBy'">
-            {{getName(object)}}
-          </div>
-          <div v-else-if="col.dbField === 'quantity'">
-            {{getQuantity(object)}}
+          <div v-else-if="col.dbField === 'updatedAt'">
+            <span>{{entry[col.dbField] | relativeTime}}</span>
           </div>
           <div v-else>
-            {{object[col.dbField]}}
+            {{entry[col.dbField]}}
           </div>
           </td>
           <td>
             <button
-              @click="updateModel(object)"
+              @click="updateUser(entry)"
             >Edit</button>
             <button
-              @click="deleteModel(object)"
+              @click="deleteUser(entry)"
             >Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
+
   </div>
 </template>
 
 <script>
-import { ALL_USERS_QUERY } from '../../constants/graphql/users'
-// import { GC_USER_ID } from '../../constants/settings'
+import { ALL_USERS_QUERY, DELETE_USER_MUTATION } from '../../../constants/graphql/users'
+import { GC_USER_ID } from '../../../constants/settings'
 
 export default {
-  name: 'MedallionsIssuedTable',
+  name: 'UserTable',
+  props: {
+    data: Array,
+    columns: Array,
+    filterKey: String
+  },
   data: function () {
     var sortOrders = {}
-    // const fields = this.columns.map(x => x.dbField)
-    // fields.forEach(function (key) {
-    //   sortOrders[key] = 1
-    // })
+    const fields = this.columns.map(x => x.dbField)
+    fields.forEach(function (key) {
+      sortOrders[key] = 1
+    })
     return {
       sortKey: '',
-      searchQuery: '',
-      sortOrders: sortOrders,
-      data: [
-        {firstName: 'test1', lastName: 'test2'},
-        {firstName: 'test3', lastName: 'test4'},
-        {firstName: 'test5', lastName: 'test6'}
-      ],
-      columns: [
-        {dbField: 'ownedBy', title: 'Owned By'},
-        {dbField: 'quantity', title: 'quantity'}
-        // {dbField: 'id', title: 'id'},
-        // {dbField: 'createdAt', title: 'Created At'},
-        // {dbField: 'message', title: 'Message'},
-        // {dbField: 'category', title: 'Category'},
-        // {dbField: 'issuedBy', title: 'Issued By'}
-      ]
-    }
-  },
-  apollo: {
-    // allUser here pulls the data from ALL_USERS_QUERY and assigns it to the data(){} object at the top of script
-    // allMedallions: {
-    //   query: ALL_MEDALLIONS_QUERY,
-    //   result ({ data }) {
-    //     console.log('Data', data)
-    //     this.data = data.allMedallions
-    //   }
-    // },
-    allUsers: {
-      query: ALL_USERS_QUERY,
-      result ({ data }) {
-        console.log('Data', data)
-        this.data = data.allUsers
-      }
+      sortOrders: sortOrders
     }
   },
   computed: {
     filteredData: function () {
       var sortKey = this.sortKey
-      var searchQuery = this.searchQuery && this.searchQuery.toLowerCase()
+      var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1
       var data = this.data
-      if (searchQuery) {
+      if (filterKey) {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(searchQuery) > -1
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
           })
         })
       }
@@ -139,20 +106,6 @@ export default {
     }
   },
   methods: {
-    getName: function (owner) {
-      if (owner && owner.firstName) {
-        return `${owner.firstName} ${owner.lastName}`
-      } else {
-        return ''
-      }
-    },
-    getQuantity (object) {
-      if (object.medallions) {
-        return object.medallions.length
-      } else {
-        return 0
-      }
-    },
     isCreatedAt: function (field) {
       if (field === 'createdAt') {
         return true
@@ -171,51 +124,46 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    viewModel: function (obj) {
-      localStorage.setItem(obj.__typename, JSON.stringify(obj))
-      this.$router.push({path: `/${obj.__typename}/${obj.id}/medallions`})
+    viewUser: function (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+      this.$router.push({path: `/user/${user.id}`})
     },
-    updateModel (obj) {
-      localStorage.setItem(obj.__typename, JSON.stringify(obj))
-      console.log('test1', JSON.parse(localStorage.getItem(obj.__typename)))
-      this.$router.push({path: `/${obj.__typename}/update/${obj.id}`})
+    updateUser (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+      console.log('test1', JSON.parse(localStorage.getItem('user')))
+      this.$router.push({path: `/user/update/${user.id}`})
+    },
+    deleteUser (obj) {
+      console.log('Object', obj)
+      const currentUser = localStorage.getItem(GC_USER_ID)
+      console.log('Object', currentUser)
+      if (obj.id !== currentUser) {
+        this.$apollo.mutate({
+          mutation: DELETE_USER_MUTATION,
+          variables: {
+            id: obj.id
+          },
+          update: (store, { data: { deleteObject } }) => {
+            // Read the data from our cache for this query.
+            const data = store.readQuery({ query: ALL_USERS_QUERY })
+            // Remove item from the list
+            const index = data.allUsers.findIndex(x => x.id === obj.id)
+            if (index !== -1) {
+              data.allUsers.splice(index, 1)
+            }
+            // Take the modified data and write it back into the store.
+            store.writeQuery({ query: ALL_USERS_QUERY, data })
+          }
+        }).catch((error) => {
+          console.error(error)
+        })
+      }
     }
-    // deleteModel (obj) {
-    //   console.log('Object', obj)
-    //   const currentUser = localStorage.getItem(GC_USER_ID)
-    //   console.log('Object', currentUser)
-    //   if (obj.id !== currentUser) {
-    //     this.$apollo.mutate({
-    //       mutation: DELETE_USER_MUTATION,
-    //       variables: {
-    //         id: obj.id
-    //       },
-    //       update: (store, { data: { deleteObject } }) => {
-    //         // Read the data from our cache for this query.
-    //         const data = store.readQuery({ query: ALL_USERS_QUERY })
-    //         // Remove item from the list
-    //         const index = data.allUsers.findIndex(x => x.id === obj.id)
-    //         if (index !== -1) {
-    //           data.allUsers.splice(index, 1)
-    //         }
-    //         // Take the modified data and write it back into the store.
-    //         store.writeQuery({ query: ALL_USERS_QUERY, data })
-    //       }
-    //     }).catch((error) => {
-    //       console.error(error)
-    //     })
-    //   }
-    // }
   }
 }
 </script>
 
 <style>
-/* body {
-  font-family: Helvetica Neue, Arial, sans-serif;
-  font-size: 14px;
-  color: #444;
-} */
 
 /* tr:nth-child(3) { border: solid thin; } */
 table {

@@ -10,6 +10,18 @@ export const ALL_USERS_QUERY = gql`
       email
       createdAt
       updatedAt
+      preferences {
+        id
+      }
+      responses {
+        id
+      }
+      volunteeringLogs {
+        id
+      }
+      notifications {
+        id
+      }
       medallions {
         id
         createdAt
@@ -50,19 +62,6 @@ export const GET_USER_QUERY = gql`
         opportunitiesRecurring
         opportunitiesEmailFrequency
       }
-    }
-  }
-`
-
-export const USERS_ON_FEED_QUERY = gql`
-  query AllUsersQuery {
-    allUsers {
-      id
-      firstName
-      lastName
-      email
-      createdAt
-      updatedAt
     }
   }
 `

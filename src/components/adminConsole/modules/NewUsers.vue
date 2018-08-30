@@ -11,11 +11,11 @@
           <form class="search">
             <input name="query" v-model="searchQuery" placeholder="Search">
           </form>
-          <user-table
+          <base-table
             :data="allUsers"
             :columns="columns"
             :filter-key="searchQuery">
-          </user-table>
+          </base-table>
         </div>
       </div>
     </div>
@@ -25,14 +25,14 @@
 <script>
 import Chart from 'chart.js'
 // import CommitChart from './CommitChart'
-import UserTable from './UserTable'
-import { ALL_USERS_QUERY } from '../../constants/graphql/users'
+import BaseTable from './BaseTable'
+import { ALL_USERS_QUERY } from '../../../constants/graphql/users'
 // import { ALL_PEOPLE_QUERY, NEW_PEOPLE_SUBSCRIPTION } from '../constants/graphql'
 
 export default {
   name: 'NewUsers',
   components: {
-    UserTable
+    BaseTable
   },
   data: function () {
     return {
