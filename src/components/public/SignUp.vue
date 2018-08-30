@@ -1,5 +1,5 @@
 <template>
-  <div class="_box">
+  <div class="component">
     <div class="companyName">Good Citizen Network</div>
     <div class="inputs">
       <div class="field">
@@ -24,6 +24,7 @@
           placeholder="Citizen">
       </div>
       <div class="field">
+        <label for="">Password</label>
         <input
           v-model="password"
           type="password"
@@ -31,7 +32,10 @@
       </div>
     </div>
     <div>
-      <button @click="create">
+      <button
+        @click="create"
+        class="_button1"
+      >
         Sign Up
       </button>
     </div>
@@ -79,8 +83,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box {
+.component {
   width: 25vw;
+  background-color: var(--background-color2);
   // height: 40vh;
   margin: auto;
   margin-top: 15vh;
@@ -91,8 +96,9 @@ export default {
   text-align: center;
 }
 .companyName {
-  margin-top: 10vh;
-  color: var(--text-color1);
+  margin-top: 8vh;
+  margin-bottom: 5vh;
+  color: var(--font-color1);
   font-size: 4vh;
 }
 .inputs {
@@ -100,12 +106,13 @@ export default {
 }
 .field {
   width: 100%;
-  margin-top: 3vh;
+  margin-bottom: 3vh;
   // display: flex;
   // justify-content: center;
   // border: 1px solid black;
 }
 label {
+  color: var(--font-color3);
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -119,12 +126,12 @@ input {
   border-right: none;
   border-bottom: .25vh solid lightgray;
 }
-button {
-  width: 100%;
-  margin-top: 5vh;
-  background-color: #efba34;
-  border-radius: 3vh;
-}
+// button {
+//   width: 100%;
+//   margin-top: 5vh;
+//   background-color: #efba34;
+//   border-radius: 3vh;
+// }
 .linkBlock {
   margin-top: 3vh;
   .link {
