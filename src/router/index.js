@@ -8,6 +8,8 @@ import SignUp from '../components/public/SignUp'
 import Home from '@/components/public/Home'
 
 // Organization Console
+import OrganizationConsoleHeader from '../components/organizationConsole/OrganizationConsoleHeader'
+import OrganizationSignUpPage from '../components/public/OrganizationSignUpPage'
 import MyOpportunitiesPage from '../components/organizationConsole/volunteerOpportunities/MyOpportunitiesPage'
 
 // User Console
@@ -38,6 +40,10 @@ const router = new Router({
   routes: [
   // ======================================= Public Pages =============================================
     {
+      path: '*',
+      redirect: '/home'
+    },
+    {
       path: '/',
       component: PublicHeader,
       children: [
@@ -64,13 +70,19 @@ const router = new Router({
         {
           path: '/signup',
           name: 'SignUp',
-          component: SignUp
+          component: SignUp,
+          meta: {
+            requiresAuth: false
+          }
+        },
+        {
+          path: 'organization/signUp',
+          component: OrganizationSignUpPage,
+          meta: {
+            requiresAuth: false
+          }
         }
       ]
-    },
-    {
-      path: '*',
-      redirect: '/home'
     },
     // ======================================= User Console Pages =============================================
     {
@@ -98,7 +110,6 @@ const router = new Router({
             requiresAuth: true
           }
         },
-        //  ------------------------------------------ User Pages ----------------------------------
         {
           path: '/profile',
           component: ProfilePage,
@@ -106,6 +117,34 @@ const router = new Router({
             requiresAuth: true
           }
         }
+      ]
+    },
+    // ======================================= Organization Console Pages =============================================
+    {
+      path: '/organization',
+      component: OrganizationConsoleHeader,
+      children: [
+        // {
+        //   path: '/feed',
+        //   component: FeedPage,
+        //   meta: {
+        //     requiresAuth: true
+        //   }
+        // },
+        // {
+        //   path: '/myopportunities',
+        //   component: MyOpportunitiesPage,
+        //   meta: {
+        //     requiresAuth: true
+        //   }
+        // },
+        // {
+        //   path: '/notifications',
+        //   component: NotificationsPage,
+        //   meta: {
+        //     requiresAuth: true
+        //   }
+        // },
       ]
     },
     // ------------------------------------------ Admin ----------------------------------

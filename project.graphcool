@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 17
+# version: 19
 
 type User @model {
   id: ID! @isUnique
@@ -17,10 +17,6 @@ type User @model {
   notifications: [Notification!]! @relation(name: "UserNotifications")
   medallions: [Medallion!]! @relation(name: "UserMedallions")
   medallionsIssued: [Medallion!]! @relation(name: "UserIssuedMedallions")
-  persons: [Person!]! @relation(name: "UsersPersons")
-  interestedOpportunities: [Opportunity!]! @relation(name: "InterestedOpportunities")
-  goingOpportunities: [Opportunity!]! @relation(name: "GoingOpportunities")
-  attendedOpportunities: [Opportunity!]! @relation(name: "AttendedOpportunities")
   organizations: [Organization!]! @relation(name: "OrgsPersonnel")
   responses: [Response!]! @relation(name: "UserResponses")
 }
@@ -60,9 +56,6 @@ type Opportunity @model {
   location: String
   startTime: DateTime
   endTime: DateTime
-  interestedUsers: [User!]! @relation(name: "InterestedOpportunities")
-  goingUsers: [User!]! @relation(name: "GoingOpportunities")
-  attendedUsers: [User!]! @relation(name: "AttendedOpportunities")
   responses: [Response!]! @relation(name: "OpportunityResponses")
 }
 
@@ -126,20 +119,5 @@ type Organization @model {
   name: String
   url: String
   address: Location @relation(name: "OrganizationAddress")
-  personnel: User @relation(name: "OrgsPersonnel")
-}
-
-type Person @model {
-  createdAt: DateTime!
-  displayName: String
-  email: String
-  firstName: String
-  id: ID! @isUnique
-  lastName: String
-  ownedBy: User @relation(name: "UsersPersons")
-  phone1: String
-  phone2: String
-  phoneTag1: String
-  phoneTag2: String
-  updatedAt: DateTime!
+  personnel: [User!]! @relation(name: "OrgsPersonnel")
 }
