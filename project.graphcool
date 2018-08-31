@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 19
+# version: 21
 
 type User @model {
   id: ID! @isUnique
@@ -43,7 +43,7 @@ type Location @model {
   country: String
   latitude: String
   longitude: String
-  organization: Organization @relation(name: "OrganizationAddress")
+  organization: Organization @relation(name: "OrganizationLocation")
 }
 
 type Opportunity @model {
@@ -117,7 +117,9 @@ type Organization @model {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String
-  url: String
-  address: Location @relation(name: "OrganizationAddress")
+  phone: String
+  email: String
+  website: String
+  location: Location @relation(name: "OrganizationLocation")
   personnel: [User!]! @relation(name: "OrgsPersonnel")
 }

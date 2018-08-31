@@ -1,6 +1,5 @@
 <template>
   <div class="page">
-    <h1>{{this.user.name}}</h1>
     <div class="field">
       <h1>{{`${this.user.firstName} ${this.user.lastName}`}}</h1>
     </div>

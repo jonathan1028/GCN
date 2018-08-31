@@ -2,24 +2,25 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Public Pages
-import PublicHeader from '../components/public/PublicHeader'
+import PublicLayout from '../components/public/PublicLayout'
+import Home from '@/components/public/Home'
 import Login from '../components/public/Login'
 import SignUp from '../components/public/SignUp'
-import Home from '@/components/public/Home'
+import OrganizationSignUpPage from '../components/public/OrganizationSignUpPage'
 
 // Organization Console
-import OrganizationConsoleHeader from '../components/organizationConsole/OrganizationConsoleHeader'
-import OrganizationSignUpPage from '../components/public/OrganizationSignUpPage'
+import OrganizationConsoleLayout from '../components/organizationConsole/OrganizationConsoleLayout'
 import MyOpportunitiesPage from '../components/organizationConsole/volunteerOpportunities/MyOpportunitiesPage'
+import OrganizationProfilePage from '../components/organizationConsole/pages/OrganizationProfilePage'
 
 // User Console
-import UserConsoleHeader from '../components/userConsole/UserConsoleHeader'
+import UserConsoleLayout from '../components/userConsole/UserConsoleLayout'
 import FeedPage from '../components/userConsole/pages/FeedPage'
 import ProfilePage from '../components/userConsole/pages/ProfilePage'
 import NotificationsPage from '../components/userConsole/pages/NotificationsPage'
 
 // Admin Console
-import AdminHeader from '../components/adminConsole/AdminHeader'
+import AdminLayout from '../components/adminConsole/AdminLayout'
 import AdminDashboardPage from '../components/adminConsole/pages/AdminDashboardPage'
 import AdminUsersPage from '../components/adminConsole/pages/AdminUsersPage'
 import AdminOrgsPage from '../components/adminConsole/pages/AdminOrgsPage'
@@ -45,7 +46,7 @@ const router = new Router({
     },
     {
       path: '/',
-      component: PublicHeader,
+      component: PublicLayout,
       children: [
         {
           path: '/',
@@ -87,7 +88,7 @@ const router = new Router({
     // ======================================= User Console Pages =============================================
     {
       path: '/',
-      component: UserConsoleHeader,
+      component: UserConsoleLayout,
       children: [
         {
           path: '/feed',
@@ -122,7 +123,7 @@ const router = new Router({
     // ======================================= Organization Console Pages =============================================
     {
       path: '/organization',
-      component: OrganizationConsoleHeader,
+      component: OrganizationConsoleLayout,
       children: [
         // {
         //   path: '/feed',
@@ -150,7 +151,7 @@ const router = new Router({
     // ------------------------------------------ Admin ----------------------------------
     {
       path: '/admin',
-      component: AdminHeader,
+      component: AdminLayout,
       children: [
         {
           path: 'dashboard',
@@ -184,6 +185,13 @@ const router = new Router({
         {
           path: 'organizations',
           component: AdminOrgsPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'organization/:id',
+          component: OrganizationProfilePage,
           meta: {
             requiresAuth: true
           }
