@@ -125,6 +125,13 @@ const router = new Router({
       path: '/organization',
       component: OrganizationConsoleLayout,
       children: [
+        {
+          path: 'profile/:id',
+          component: OrganizationProfilePage,
+          meta: {
+            requiresAuth: true
+          }
+        }
         // {
         //   path: '/feed',
         //   component: FeedPage,

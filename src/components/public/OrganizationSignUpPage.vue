@@ -60,6 +60,7 @@
 
 <script>
 import { CREATE_ORGANIZATION_MUTATION } from '../../constants/graphql/organizations'
+import { SIGNIN_USER_MUTATION } from '../../constants/graphql/users'
 
 export default {
   name: 'OrganizationSignUpPage',
@@ -74,32 +75,46 @@ export default {
   },
   methods: {
     create () {
+      // If email does not exist create User and then Organization
+      // If email and password authenticate, get User, create Org, and attach to User
       this.$apollo.mutate({
-        mutation: CREATE_ORGANIZATION_MUTATION,
+        mutation: SIGNIN_USER_MUTATION,
         variables: {
-          name: this.name
+          email: this.email,
+          password: this.password
         }
-        // update: (store, { data: { createVolunteeringLog } }) => {
-        //   // Pull data from the stored query
-        //   const data = store.readQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY })
-        //   // We add the new data
-        //   data.allVolunteeringLogs.push(createVolunteeringLog)
-        //   // We update the cache
-        //   store.writeQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY, data: data })
-        // }
+      }).then((result) => {
+        // commit('authenticated')
+        if (result.data.signinUser.user.id) {
+          console.log('User authenticated', result.data.signinUser)
+
+          this.$apollo.mutate({
+            mutation: CREATE_ORGANIZATION_MUTATION,
+            variables: {
+              personnelIds: result.data.signinUser.user.id,
+              name: this.name
+            }
+            // update: (store, { data: { createVolunteeringLog } }) => {
+            //   // Pull data from the stored query
+            //   const data = store.readQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY })
+            //   // We add the new data
+            //   data.allVolunteeringLogs.push(createVolunteeringLog)
+            //   // We update the cache
+            //   store.writeQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY, data: data })
+            // }
+          }).catch((error) => {
+            console.error(error)
+          }).then((data) => {
+            console.log('Org Creation!', data)
+          })
+          // commit('authenticated', result.data.signinUser)
+          // dispatch('preloadUser', result.data.signinUser.user)
+        } else {
+          console.log('Incorrect username/password')
+        }
       }).catch((error) => {
-        console.error(error)
-      }).then((data) => {
-        console.log('Org Creation!', data)
+        alert(error)
       })
-      // this.$store.dispatch('createUser',
-      //   {
-      //     email: this.email,
-      //     firstName: this.firstName,
-      //     lastName: this.lastName,
-      //     password: this.password
-      //   }
-      // )
     }
   }
 }

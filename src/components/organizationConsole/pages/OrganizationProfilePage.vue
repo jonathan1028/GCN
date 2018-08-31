@@ -17,9 +17,9 @@
           Profile
         </div>
         <div
-          v-bind:class="{ 'active-tab': activeTab === 'volunteerPreferences' }"
+          v-bind:class="{ 'active-tab': activeTab === 'personnel' }"
           class="tab"
-          @click.prevent="isActiveTab('volunteerPreferences')"
+          @click.prevent="isActiveTab('personnel')"
         >
           My Personnel
         </div>
@@ -136,12 +136,20 @@
             </div>
           </div>
         </div>
+        <!-- ------------------------------ Profile Panel ------------------------------------ -->
+        <div
+            class="panel"
+            v-if="activeTab === 'personnel'"
+        >
+          <personnel></personnel>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Personnel from '../modules/Personnel'
 import { GET_USER_QUERY } from '../../../constants/graphql/users'
 import { GET_ORGANIZATION_QUERY, UPDATE_ORGANIZATION_MUTATION } from '../../../constants/graphql/organizations'
 import { CREATE_LOCATION_MUTATION } from '../../../constants/graphql/locations'
@@ -150,6 +158,9 @@ import { format, differenceInMinutes } from 'date-fns'
 
 export default {
   name: 'ProfilePage',
+  components: {
+    Personnel
+  },
   data () {
     return {
       keyword: '',

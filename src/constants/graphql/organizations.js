@@ -25,13 +25,19 @@ export const GET_ORGANIZATION_QUERY = gql`
         state
         zipcode
       }
+      personnel {
+        id
+        firstName
+        lastName
+      }
     }
   }
 `
 
 export const CREATE_ORGANIZATION_MUTATION = gql`
-  mutation CreateOrganizationMutation($name: String) {
+  mutation CreateOrganizationMutation($name: String, $personnelIds: [ID!]) {
     createOrganization(
+      personnelIds: $personnelIds
       name: $name
     ) {
       id
