@@ -14,7 +14,7 @@
               <div>|</div>
               <router-link to="/myopportunities">My Opportunities</router-link>
               <div>|</div>
-              <router-link to="/admin">Admin</router-link>
+              <router-link to="/admin/dashboard">Admin</router-link>
               <!-- Logged in navigation -->
               <!-- <div class="authenticated-nav" v-if="userId">
                 <router-link to="/people">People</router-link>
