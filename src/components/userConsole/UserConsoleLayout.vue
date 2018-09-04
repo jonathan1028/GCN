@@ -57,28 +57,12 @@
 </template>
 
 <script>
-// import { GC_USER_ID, GC_AUTH_TOKEN } from '../../constants/settings'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AppHeader',
   computed: mapGetters(['authenticated', 'userId']),
-  // {
-  //   // You first retrieve the userId from this.$root.$data.
-  //   // If the userId is not available, the submit-button won’t be rendered anymore.
-  //   // That way you make sure only authenticated users can create new links
-  //   userId () {
-  //     return this.$root.$data.userId
-  //   }
-  // },
   methods: mapActions(['logout'])
-  // methods: {
-  //   logout () {
-  //     localStorage.removeItem(GC_USER_ID)
-  //     localStorage.removeItem(GC_AUTH_TOKEN)
-  //     this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
-  //   }
-  // }
 }
 </script>
 

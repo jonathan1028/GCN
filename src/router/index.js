@@ -30,10 +30,9 @@ import AdminResponsesPage from '../components/adminConsole/pages/AdminResponsesP
 import UserUpdate from '../components/adminConsole/modules/UserUpdate'
 import UserRead from '../components/adminConsole/modules/UserRead'
 import NewUsers from '../components/adminConsole/modules/NewUsers'
-import { GC_USER_ID } from '../constants/settings'
+// import { GC_USER_ID } from '../constants/settings'
 import UsersMedallionsTable from '../components/adminConsole/modules/UsersMedallionsTable'
-
-let userId = localStorage.getItem(GC_USER_ID)
+import store from '../store/index'
 
 Vue.use(Router)
 
@@ -255,12 +254,12 @@ const router = new Router({
 
 // Need to add funcationality to default to a protected route if requiresAuth has not been set on a route
 router.beforeEach((to, from, next) => {
-  let currentUser = userId
-  if (userId) {
-    console.log('User is Authenticated')
+  if (store.getters.authenticated) {
+    console.log('User is Authenticated from router')
   }
+
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth && !currentUser) {
+  if (requiresAuth && !store.getters.authenticated) {
     next('login')
   } else {
     next()
@@ -268,27 +267,3 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
-
-// const router = new Router({
-//   routes: [
-//     {
-//       path: '/people',
-//       component: People,
-//       meta: {
-//         requiresAuth: true
-//       }
-//     }
-//   ]
-// })
-
-// router.beforeEach((to, from, next) => {
-//   const currentUser = userId
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-//   if (requiresAuth && !currentUser) {
-//     next('/login')
-//   } else if (requiresAuth && currentUser) {
-//     next()
-//   } else {
-//     next()
-//   }
-// })

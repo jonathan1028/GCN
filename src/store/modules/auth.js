@@ -54,7 +54,7 @@ const mutations = {
     // localStorage.setItem('auth0UserId', state.auth0UserId)
     // console.log('auth0UserId', localStorage.getItem('auth0UserId'))
     // // Checks to see if the auth0 user has been created in the GraphCool db yet
-    router.push({ path: 'feed' })
+    // router.push({ path: 'feed' })
   },
 
   userId (state, userId) {
@@ -65,21 +65,15 @@ const mutations = {
   logout (state) {
     state.authenticated = false
     state.userId = null
-    // For Auth0 authentication
-    // state.accessToken = null
-    // state.idToken = false
-
     localStorage.removeItem(GC_USER_ID)
-
-    // For Auth0 authentication
-    // localStorage.removeItem('access_token')
-    // localStorage.removeItem('id_token')
-    // localStorage.removeItem('expires_at')
-    // localStorage.removeItem('auth0UserId')
+    console.log('Authenticated', state.authenticated)
+    console.log('UserId', state.userId)
+    console.log('localStorage', localStorage.getItem(GC_USER_ID))
 
     // Navigate to the home route
-    router.replace('home')
+    router.replace('/home')
   },
+
   updateUser (state, data) {
     console.log('User State Changed')
     state.user = JSON.parse(JSON.stringify(data))
@@ -120,6 +114,7 @@ const actions = {
         }
       }).then((result) => {
         commit('updateUser', user)
+        router.push({ path: 'feed' })
       }).catch((error) => {
         console.error(error)
       })

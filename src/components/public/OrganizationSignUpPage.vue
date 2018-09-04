@@ -76,7 +76,8 @@ export default {
   methods: {
     create () {
       // If email does not exist create User and then Organization
-      // If email and password authenticate, get User, create Org, and attach to User
+
+      // Authenticate email/password combination
       this.$apollo.mutate({
         mutation: SIGNIN_USER_MUTATION,
         variables: {
@@ -84,10 +85,10 @@ export default {
           password: this.password
         }
       }).then((result) => {
-        // commit('authenticated')
+        // if user is authenticated
         if (result.data.signinUser.user.id) {
           console.log('User authenticated', result.data.signinUser)
-
+          this.$store.commit('authenticated', result.data.signinUser)
           this.$apollo.mutate({
             mutation: CREATE_ORGANIZATION_MUTATION,
             variables: {
@@ -104,11 +105,11 @@ export default {
             // }
           }).catch((error) => {
             console.error(error)
-          }).then((data) => {
-            console.log('Org Creation!', data)
+          }).then((result) => {
+            console.log('Org Creation!', result.data.createOrganization)
+            console.log('Route', `/organization/profile/${result.data.createOrganization.id}`)
+            this.$router.push({ path: `/organization/profile/${result.data.createOrganization.id}` })
           })
-          // commit('authenticated', result.data.signinUser)
-          // dispatch('preloadUser', result.data.signinUser.user)
         } else {
           console.log('Incorrect username/password')
         }

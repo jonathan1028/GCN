@@ -167,7 +167,7 @@ export default {
       userId: this.$store.state.auth.user.id,
       User: {},
       activeTab: 'profile',
-      organizationId: JSON.parse(localStorage.getItem('organization')).id,
+      organizationId: this.$route.params.id,
       Organization: {
         location: {
           addressLine1: '',

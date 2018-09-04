@@ -14,33 +14,11 @@
               <div>|</div>
               <router-link to="/myopportunities">My Opportunities</router-link>
               <div>|</div>
-              <router-link to="/admin">Admin</router-link>
-              <!-- Logged in navigation -->
-              <!-- <div class="authenticated-nav" v-if="userId">
-                <router-link to="/people">People</router-link>
-                <div>|</div>
-                <router-link to="/opportunities">Opportunities</router-link>
-                <div>|</div>
-              </div>
-              <router-link to="/admin">Admin Panel</router-link>
-              <div>|</div>
-              <router-link to="/newusers">New User Accounts</router-link> -->
+              <router-link to="/admin/dashboard">Admin</router-link>
             </div>
           </div>
           <!-- Login buttons   -->
           <div>
-            <!-- <div>
-              {{user.email}}
-            </div> -->
-            <!-- <button
-              v-if="!authenticated"
-              @click="login()">
-                Log In
-            </button> -->
-            <!-- <router-link
-              @click="logout()">
-              Login
-              </router-link> -->
             <div
               v-if="authenticated"
               class="link"
@@ -57,28 +35,12 @@
 </template>
 
 <script>
-// import { GC_USER_ID, GC_AUTH_TOKEN } from '../../constants/settings'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'OrganizationsConsoleHeader',
   computed: mapGetters(['authenticated', 'userId']),
-  // {
-  //   // You first retrieve the userId from this.$root.$data.
-  //   // If the userId is not available, the submit-button won’t be rendered anymore.
-  //   // That way you make sure only authenticated users can create new links
-  //   userId () {
-  //     return this.$root.$data.userId
-  //   }
-  // },
   methods: mapActions(['logout'])
-  // methods: {
-  //   logout () {
-  //     localStorage.removeItem(GC_USER_ID)
-  //     localStorage.removeItem(GC_AUTH_TOKEN)
-  //     this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
-  //   }
-  // }
 }
 </script>
 
