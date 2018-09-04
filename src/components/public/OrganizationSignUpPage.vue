@@ -60,7 +60,7 @@
 
 <script>
 import { CREATE_ORGANIZATION_MUTATION } from '../../constants/graphql/organizations'
-import { SIGNIN_USER_MUTATION } from '../../constants/graphql/users'
+import { SIGNIN_USER_MUTATION, CREATE_USER_MUTATION, GET_USER_QUERY } from '../../constants/graphql/users'
 
 export default {
   name: 'OrganizationSignUpPage',
@@ -74,20 +74,17 @@ export default {
     }
   },
   methods: {
-    create () {
-      // If email does not exist create User and then Organization
-
-      // Authenticate email/password combination
+    login (email, password) {
       this.$apollo.mutate({
         mutation: SIGNIN_USER_MUTATION,
         variables: {
-          email: this.email,
-          password: this.password
+          email,
+          password
         }
       }).then((result) => {
-        // if user is authenticated
         if (result.data.signinUser.user.id) {
-          console.log('User authenticated', result.data.signinUser)
+          this.$store.commit('authenticated', result.data.signinUser)
+          console.log('Login succeeded')
           this.$store.commit('authenticated', result.data.signinUser)
           this.$apollo.mutate({
             mutation: CREATE_ORGANIZATION_MUTATION,
@@ -95,19 +92,10 @@ export default {
               personnelIds: result.data.signinUser.user.id,
               name: this.name
             }
-            // update: (store, { data: { createVolunteeringLog } }) => {
-            //   // Pull data from the stored query
-            //   const data = store.readQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY })
-            //   // We add the new data
-            //   data.allVolunteeringLogs.push(createVolunteeringLog)
-            //   // We update the cache
-            //   store.writeQuery({ query: ALL_VOLUNTEERING_LOGS_QUERY, data: data })
-            // }
           }).catch((error) => {
             console.error(error)
           }).then((result) => {
             console.log('Org Creation!', result.data.createOrganization)
-            console.log('Route', `/organization/profile/${result.data.createOrganization.id}`)
             this.$router.push({ path: `/organization/profile/${result.data.createOrganization.id}` })
           })
         } else {
@@ -115,6 +103,43 @@ export default {
         }
       }).catch((error) => {
         alert(error)
+      })
+    },
+    create () {
+      let firstName = this.firstName
+      let lastName = this.lastName
+      let email = this.email
+      let password = this.password
+
+      // Lookup User by the email submitted
+      this.$apollo.query({
+        query: GET_USER_QUERY,
+        variables: {
+          email: this.email
+        }
+      }).catch((error) => {
+        console.error(error)
+      }).then((result) => {
+        // If email does not exist create User and then Organization
+        if (result.data.User === null) {
+          console.log('User with this email address cannot be found')
+          this.$apollo.mutate({
+            mutation: CREATE_USER_MUTATION,
+            variables: {
+              email: email,
+              firstName: firstName,
+              lastName: lastName,
+              password: password
+            }
+          }).catch((error) => {
+            console.error(error)
+          }).then((result) => {
+            this.login(email, password)
+          })
+        } else {
+          // If user email was found then authenticate email/password combination
+          this.login(email, password)
+        }
       })
     }
   }
