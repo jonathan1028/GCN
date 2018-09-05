@@ -4,7 +4,7 @@
       <div class="header-content">
           <div class="main-nav">
             <!-- Logo -->
-            <div class="logo">GCN</div>
+            <div class="logo">GCN - Organizations</div>
             <div class="nav-buttons">
               <router-link to="/feed">Feed</router-link>
               <div>|</div>
@@ -18,7 +18,21 @@
             </div>
           </div>
           <!-- Login buttons   -->
-          <div>
+          <div class="right-side-links">
+            <select
+              v-model="selected"
+              @change="selectProfile()"
+            >
+              <option value="userEmail">{{userEmail}}</option>
+              <option
+                v-for="(org, index) in user.organizations"
+                :key="index"
+                :value="org.id"
+                text="org.id"
+              >
+                {{ org.name }}
+              </option>
+            </select>
             <div
               v-if="authenticated"
               class="link"
@@ -36,11 +50,57 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { GET_ORGANIZATION_QUERY } from '../../constants/graphql/organizations'
 
 export default {
+
   name: 'OrganizationsConsoleHeader',
-  computed: mapGetters(['authenticated', 'userId']),
-  methods: mapActions(['logout'])
+  data () {
+    console.log('Test', this.$store.state.auth.user.id)
+    return {
+      selected: 'userEmail'
+    }
+  },
+  apollo: {
+    Organization: {
+      query: GET_ORGANIZATION_QUERY,
+      // Changing variables: to a function with a return statement makes Apollo
+      // wait on the data of userId to be defined before querrying and prevents an undefined error
+      variables () {
+        return {
+          id: this.selected
+        }
+      }
+    }
+  },
+  computed: mapGetters(['authenticated', 'userId', 'userEmail', 'user']),
+  methods: {
+    ...mapActions(['logout']),
+    selectProfile () {
+      console.log('Selected', this.selected)
+      if (this.selected !== this.userEmail) {
+        console.log('Path', `/organization/profile/${this.selected}`)
+        console.log(this.$apollo.queries)
+        // this.$apollo.queries.Organization.refetch({
+        //   variables: {
+        //     id: this.selected
+        //   }
+        // })
+        this.$apollo.query({
+          query: GET_ORGANIZATION_QUERY,
+          variables: {
+            id: this.selected
+          }
+        }).catch((error) => {
+          console.error(error)
+        }).then((result) => {
+          this.$store.commit('updateCurrentOrganization', result.data.Organization)
+          console.log('Result', this.$store.state.currentOrganization)
+          this.$router.replace(`/organization/profile/${this.selected}`)
+        })
+      }
+    }
+  }
 }
 </script>
 
@@ -102,7 +162,7 @@ export default {
   text-decoration: none;
 }
 
-.authenticated-nav{
+.right-side-links{
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -14,7 +14,8 @@ import apolloClient from '../../apollo-client'
 const state = {
   userId: '',
   user: {},
-  authenticated: false
+  authenticated: false,
+  userEmail: ''
   // authenticated: localStorage.getItem('authenticated'),
   // accessToken: localStorage.getItem('access_token'),
   // idToken: localStorage.getItem('id_token'),
@@ -27,6 +28,12 @@ const getters = {
   },
   userId (state) {
     return state.userId
+  },
+  userEmail (state) {
+    return state.userEmail
+  },
+  user (state) {
+    return state.user
   }
 }
 
@@ -35,6 +42,7 @@ const mutations = {
     console.log('Authenticated!!!', authResult)
     state.authenticated = true
     state.userId = authResult.user.id
+    state.userEmail = authResult.user.email
     state.user = authResult.user
     console.log('User Info', state.user)
     localStorage.setItem(GC_USER_ID, authResult.user.id)

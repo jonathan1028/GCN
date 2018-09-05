@@ -83,6 +83,13 @@ export const CREATE_USER_MUTATION = gql`
       }
     ) {
       id
+      firstName
+      lastName
+      email
+      organizations {
+        id
+        name
+      }
     }
 
     signinUser(email: {
@@ -92,6 +99,13 @@ export const CREATE_USER_MUTATION = gql`
       token
       user {
         id
+        firstName
+        lastName
+        email
+        organizations {
+          id
+          name
+        }
       }
     }
   }
@@ -109,7 +123,12 @@ export const SIGNIN_USER_MUTATION = gql`
         firstName
         lastName
         email
+        organizations {
+          id
+          name
+        }
       }
+      
     }
   }
 `

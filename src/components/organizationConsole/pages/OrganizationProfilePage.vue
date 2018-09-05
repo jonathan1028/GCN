@@ -3,7 +3,7 @@
     <div class="pageLayout modal-background">
       <div class="profileHeader">
         <div class="profileImage"></div>
-        <div class="user-name">{{Organization.name}}</div>
+        <div class="user-name">{{currentOrganization.name}}</div>
         <div>Location:</div>
         <div>Last Login:</div>
         <div>Joined:</div>
@@ -153,8 +153,9 @@ import Personnel from '../modules/Personnel'
 import { GET_USER_QUERY } from '../../../constants/graphql/users'
 import { GET_ORGANIZATION_QUERY, UPDATE_ORGANIZATION_MUTATION } from '../../../constants/graphql/organizations'
 import { CREATE_LOCATION_MUTATION } from '../../../constants/graphql/locations'
-import moment from 'moment'
-import { format, differenceInMinutes } from 'date-fns'
+// import moment from 'moment'
+// import { format, differenceInMinutes } from 'date-fns'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProfilePage',
@@ -167,7 +168,6 @@ export default {
       userId: this.$store.state.auth.user.id,
       User: {},
       activeTab: 'profile',
-      organizationId: this.$route.params.id,
       Organization: {
         location: {
           addressLine1: '',
@@ -178,6 +178,11 @@ export default {
       }
     }
   },
+  // created () {
+  //   this.Organization = this.$store.state.currentOrganization
+  //   // id = this.$route.params.id
+  //   console.log('Organization from beforeCreate', this.Organization)
+  // },
   apollo: {
     User: {
       query: GET_USER_QUERY,
@@ -199,7 +204,8 @@ export default {
       // wait on the data of userId to be defined before querrying and prevents an undefined error
       variables () {
         return {
-          id: this.organizationId
+          // By using a reactive variable
+          id: this.$store.state.currentOrganization.id
         }
       },
       result ({ data }) {
@@ -217,39 +223,24 @@ export default {
       }
     }
   },
-  filters: {
-    ago (time) {
-      return moment(time).fromNow()
-    },
-    formatDate (data) {
-      return format(data, 'MM/DD/YY')
-    },
-    formatTime (data) {
-      return format(data, 'hh:mma')
-    }
-  },
+  // filters: {
+  //   ago (time) {
+  //     return moment(time).fromNow()
+  //   },
+  //   formatDate (data) {
+  //     return format(data, 'MM/DD/YY')
+  //   },
+  //   formatTime (data) {
+  //     return format(data, 'hh:mma')
+  //   }
+  // },
   computed: {
+    ...mapGetters(['currentOrganization']),
     modalState () {
       return this.$store.state.showCreateVolunteeringLog
     }
   },
   methods: {
-    getDate (startTime, endTime) {
-      return `${format(startTime, 'MM/DD/YY')}   \u00A0 ${format(endTime, 'MM/DD/YY')}`
-    },
-    calculateHours (obj) {
-      // console.log('time', obj.endTime, obj.startTime, differenceInMinutes(obj.endTime, obj.startTime))
-      return (parseFloat(differenceInMinutes(obj.endTime, obj.startTime)) / 60).toPrecision(1)
-    },
-    toggleCreateVolunteeringLog () {
-      // console.log('button pushed')
-      this.$store.commit('toggleCreateVolunteeringLog')
-    },
-    toggleUpdateVolunteeringLog (obj) {
-      // console.log('button pushed')
-      this.$store.commit('updateCurrentVolunteeringLog', obj)
-      this.$store.commit('toggleUpdateVolunteeringLog')
-    },
     isActiveTab (data) {
       this.activeTab = data
       return this.activeTab
@@ -259,12 +250,13 @@ export default {
     },
     update () {
       console.log('Organization', this.Organization)
+      console.log('Organization Location ID', this.Organization.location.id)
       // Checks to see if the organization has a Location object associated with it yet
       // Organization.location.id will only exist if a Location object exists in db this protects the data
       // initialization from tripping this statement
       if (!this.Organization.location.id && (this.Organization.location.addressLine1 ||
       this.Organization.location.city || this.Organization.location.state || this.Organization.location.zipcode)) {
-        console.log('Has location')
+        console.log('No existing location')
         this.$apollo.mutate({
           mutation: CREATE_LOCATION_MUTATION,
           variables: {
@@ -280,7 +272,7 @@ export default {
           console.log('Location Created', data)
         })
       } else {
-        console.log('No location')
+        console.log('Has an existing location')
         this.$apollo.mutate({
           mutation: UPDATE_ORGANIZATION_MUTATION,
           variables: {

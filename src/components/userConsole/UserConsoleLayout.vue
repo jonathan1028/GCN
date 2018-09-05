@@ -29,23 +29,28 @@
           </div>
           <!-- Login buttons   -->
           <div>
-            <!-- <div>
-              {{user.email}}
-            </div> -->
-            <!-- <button
-              v-if="!authenticated"
-              @click="login()">
-                Log In
-            </button> -->
-            <!-- <router-link
-              @click="logout()">
-              Login
-              </router-link> -->
-            <div
-              v-if="authenticated"
-              class="link"
-              @click="logout()">
-                Log Out
+            <div class="right-side-links">
+                <!-- <option value="">{{user.organizations}}</option> -->
+              <select
+                v-model="selected"
+                @change="selectProfile()"
+              >
+                <option value="userEmail">{{userEmail}}</option>
+                <option
+                  v-for="(org, index) in user.organizations"
+                  :key="index"
+                  :value="org.id"
+                  text="org.id"
+                >
+                  {{ org.name }}
+                </option>
+              </select>
+              <div
+                v-if="authenticated"
+                class="link"
+                @click="logout()">
+                  Log Out
+              </div>
             </div>
           </div>
       </div>
@@ -61,8 +66,23 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AppHeader',
-  computed: mapGetters(['authenticated', 'userId']),
-  methods: mapActions(['logout'])
+  data () {
+    console.log('Test', this.$store.state.auth.user.id)
+    return {
+      selected: 'userEmail'
+      // selected: this.$store.state.auth.user.id
+    }
+  },
+  computed: mapGetters(['authenticated', 'userId', 'userEmail', 'user']),
+  methods: {
+    ...mapActions(['logout']),
+    selectProfile () {
+      console.log('Selected', this.selected)
+      if (this.selected !== this.userEmail) {
+        this.$router.push({ path: `/organization/profile/${this.selected}` })
+      }
+    }
+  }
 }
 </script>
 
@@ -124,7 +144,7 @@ export default {
   text-decoration: none;
 }
 
-.authenticated-nav{
+.right-side-links{
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -133,7 +133,9 @@ export default {
     view: function (obj) {
       // Creates a dynamic path and stores to localStorage regardless of what type of object is passed in
       let path = '/admin/' + obj.__typename.toLowerCase() + '/' + obj.id
-
+      if (obj.__typename === 'Organization') {
+        this.$store.commit('updateCurrentOrganization', obj)
+      }
       localStorage.setItem(obj.__typename.toLowerCase(), JSON.stringify(obj))
       this.$router.push({path: path})
     },

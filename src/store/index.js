@@ -44,12 +44,25 @@ const store = new Vuex.Store({
       going: false,
       attended: false
     },
-    selectedOpportunity: {}
+    selectedOpportunity: {},
+    currentOrganization: {
+      location: {
+        id: '',
+        name: '',
+        addressLine1: '1234 Main Street',
+        city: 'New York',
+        state: '',
+        zipcode: ''
+      }
+    }
   },
 
   getters: {
     searchQuery (state) {
       return state.searchQueryFilters
+    },
+    currentOrganization (state) {
+      return state.currentOrganization
     }
   },
 
@@ -79,6 +92,9 @@ const store = new Vuex.Store({
     },
     updateCurrentOpportunity (state, data) {
       state.currentOpportunity = JSON.parse(JSON.stringify(data))
+    },
+    updateCurrentOrganization (state, data) {
+      state.currentOrganization = JSON.parse(JSON.stringify(data))
     },
     updateCurrentVolunteeringLog (state, data) {
       state.currentVolunteeringLog = JSON.parse(JSON.stringify(data))
