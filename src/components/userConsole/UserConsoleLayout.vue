@@ -12,8 +12,6 @@
               <div>|</div>
               <router-link to="/profile">Profile</router-link>
               <div>|</div>
-              <router-link to="/myopportunities">My Opportunities</router-link>
-              <div>|</div>
               <router-link to="/admin/dashboard">Admin</router-link>
               <!-- Logged in navigation -->
               <!-- <div class="authenticated-nav" v-if="userId">

@@ -10,8 +10,8 @@ import OrganizationSignUpPage from '../components/public/OrganizationSignUpPage'
 
 // Organization Console
 import OrganizationConsoleLayout from '../components/organizationConsole/OrganizationConsoleLayout'
-import MyOpportunitiesPage from '../components/organizationConsole/volunteerOpportunities/MyOpportunitiesPage'
 import OrganizationProfilePage from '../components/organizationConsole/pages/OrganizationProfilePage'
+import MyOpportunitiesPage from '../components/organizationConsole/pages/MyOpportunitiesPage'
 
 // User Console
 import UserConsoleLayout from '../components/userConsole/UserConsoleLayout'
@@ -97,13 +97,6 @@ const router = new Router({
           }
         },
         {
-          path: '/myopportunities',
-          component: MyOpportunitiesPage,
-          meta: {
-            requiresAuth: true
-          }
-        },
-        {
           path: '/notifications',
           component: NotificationsPage,
           meta: {
@@ -127,6 +120,13 @@ const router = new Router({
         {
           path: 'profile/:id',
           component: OrganizationProfilePage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'myOpportunities',
+          component: MyOpportunitiesPage,
           meta: {
             requiresAuth: true
           }

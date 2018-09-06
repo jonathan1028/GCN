@@ -16,19 +16,19 @@
           </span>
           <div>
             <span v-if="this.$store.state.activeModal === 'create'">
-              <create-opportunity></create-opportunity>
+              <opportunity-create></opportunity-create>
             </span>
           </div>
           <div>
             <span v-if="this.$store.state.activeModal === 'update'">
-              <update-opportunity></update-opportunity>
+              <opportunity-update></opportunity-update>
             </span>
           </div>
-          <my-opportunities
+          <opportunity-list
             :data="allOpportunities"
             :columns="columns"
             :searchQuery="searchQuery">
-          </my-opportunities>
+          </opportunity-list>
         </div>
     </div>
     <div class="_box">Right Column</div>
@@ -38,14 +38,14 @@
 <script>
 // import Feed from './Feed'
 import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
-import CreateOpportunity from './CreateOpportunity'
-import UpdateOpportunity from './UpdateOpportunity'
-import MyOpportunities from './MyOpportunities'
+import OpportunityCreate from '../modules/OpportunityCreate'
+import OpportunityUpdate from '../modules/OpportunityUpdate'
+import OpportunityList from '../modules/OpportunityList'
 
 export default {
   name: 'MyOpportunitiesPage',
   components: {
-    CreateOpportunity, UpdateOpportunity, MyOpportunities
+    OpportunityCreate, OpportunityUpdate, OpportunityList
   },
   data () {
     return {

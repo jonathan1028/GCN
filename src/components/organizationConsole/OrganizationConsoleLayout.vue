@@ -10,9 +10,9 @@
               <div>|</div>
               <router-link to="/notifications">Notifications</router-link>
               <div>|</div>
-              <router-link to="/profile">Profile</router-link>
+              <router-link :to="{path: '/organization/profile/:id', params: {id: selectedProfile.id}}">Profile</router-link>
               <div>|</div>
-              <router-link to="/myopportunities">My Opportunities</router-link>
+              <router-link to="/organization/myopportunities">My Opportunities</router-link>
               <div>|</div>
               <router-link to="/admin/dashboard">Admin</router-link>
             </div>
