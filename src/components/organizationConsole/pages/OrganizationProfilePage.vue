@@ -223,17 +223,6 @@ export default {
       }
     }
   },
-  // filters: {
-  //   ago (time) {
-  //     return moment(time).fromNow()
-  //   },
-  //   formatDate (data) {
-  //     return format(data, 'MM/DD/YY')
-  //   },
-  //   formatTime (data) {
-  //     return format(data, 'hh:mma')
-  //   }
-  // },
   computed: {
     ...mapGetters(['currentOrganization']),
     modalState () {
@@ -252,7 +241,7 @@ export default {
       console.log('Organization', this.Organization)
       console.log('Organization Location ID', this.Organization.location.id)
       // Checks to see if the organization has a Location object associated with it yet
-      // Organization.location.id will only exist if a Location object exists in db this protects the data
+      // Organization.location.id will only exist if a Location object exists in db. This protects the data
       // initialization from tripping this statement
       if (!this.Organization.location.id && (this.Organization.location.addressLine1 ||
       this.Organization.location.city || this.Organization.location.state || this.Organization.location.zipcode)) {

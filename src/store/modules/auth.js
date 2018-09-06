@@ -103,6 +103,7 @@ const actions = {
         if (result.data.signinUser.user.id) {
           commit('authenticated', result.data.signinUser)
           dispatch('preloadUser', result.data.signinUser.user)
+          commit('updateSelectedProfile', result.data.signinUser.user)
         } else {
           console.log('Incorrect username/password')
         }

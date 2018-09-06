@@ -30,21 +30,7 @@
           <!-- Login buttons   -->
           <div>
             <div class="right-side-links">
-                <!-- <option value="">{{user.organizations}}</option> -->
-              <select
-                v-model="selected"
-                @change="selectProfile()"
-              >
-                <option value="userEmail">{{userEmail}}</option>
-                <option
-                  v-for="(org, index) in user.organizations"
-                  :key="index"
-                  :value="org.id"
-                  text="org.id"
-                >
-                  {{ org.name }}
-                </option>
-              </select>
+              <profile-selection></profile-selection>
               <div
                 v-if="authenticated"
                 class="link"
@@ -63,9 +49,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import ProfileSelection from '../globalModules/ProfileSelection'
 
 export default {
   name: 'AppHeader',
+  components: {
+    ProfileSelection
+  },
   data () {
     console.log('Test', this.$store.state.auth.user.id)
     return {

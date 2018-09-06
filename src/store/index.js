@@ -9,8 +9,8 @@ Vue.use(Vuex)
 
 // This will cause the entire auth module to persist through page refreshes
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage,
-  modules: ['auth']
+  storage: window.localStorage
+  // modules: ['auth']
 })
 
 const store = new Vuex.Store({
@@ -54,6 +54,11 @@ const store = new Vuex.Store({
         state: '',
         zipcode: ''
       }
+    },
+    selectedProfile: {
+      displayName: '',
+      type: 'User',
+      id: ''
     }
   },
 
@@ -63,6 +68,9 @@ const store = new Vuex.Store({
     },
     currentOrganization (state) {
       return state.currentOrganization
+    },
+    selectedProfile (state) {
+      return state.selectedProfile
     }
   },
 
@@ -112,6 +120,16 @@ const store = new Vuex.Store({
     updateSelectedOpportunity (state, data) {
       state.selectedOpportunity = JSON.parse(JSON.stringify(data))
       console.log('Selected Opportunity Set', state.selectedOpportunity)
+    },
+    updateSelectedProfile (state, data) {
+      state.selectedProfile.id = data.id
+      state.selectedProfile.type = data.__typename
+      if (data.__typename === 'User') {
+        state.selectedProfile.displayName = data.email
+      } else {
+        state.selectedProfile.displayName = data.name
+      }
+      console.log('Selected Profile Set', state.selectedProfile)
     }
   },
   actions: {
