@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 21
+# version: 22
 
 type User @model {
   id: ID! @isUnique
@@ -56,6 +56,7 @@ type Opportunity @model {
   location: String
   startTime: DateTime
   endTime: DateTime
+  organization: Organization @relation(name: "OrganizationsOpportunities")
   responses: [Response!]! @relation(name: "OpportunityResponses")
 }
 
@@ -122,4 +123,5 @@ type Organization @model {
   website: String
   location: Location @relation(name: "OrganizationLocation")
   personnel: [User!]! @relation(name: "OrgsPersonnel")
+  opportunities: [Opportunity!]! @relation(name: "OrganizationsOpportunities")
 }

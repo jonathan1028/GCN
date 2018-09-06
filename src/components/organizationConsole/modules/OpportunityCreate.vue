@@ -44,8 +44,8 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 // import { CREATE_PERSON_MUTATION } from '../constants/graphql'
-import { CREATE_OPPORTUNITY_MUTATION, ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
-import { GC_USER_ID } from '../../../constants/settings'
+import { CREATE_OPPORTUNITY_MUTATION } from '../../../constants/graphql/opportunities'
+import { GET_ORGANIZATION_QUERY } from '../../../constants/graphql/organizations'
 
 export default {
   name: 'CreateOpportunity',
@@ -65,33 +65,15 @@ export default {
       this.$store.commit('updateActiveModal', null)
     },
     create () {
-      // Checks permissions
-      const currentUser = localStorage.getItem(GC_USER_ID)
-      if (!currentUser) {
-        console.error('No user logged in')
-        return
-      }
-      console.log('User', currentUser)
-
-      // Assign data from form inputs
-      // const newDisplayName = this.firstName + ' ' + this.lastName
-      // const firstName = this.firstName
-      // const lastName = this.lastName
-      // const email = this.email
-      // const phone1 = this.phone1
-      // // Clears out data??
-      // this.firstName = ''
-      // this.lastName = ''
-      // this.phone1 = ''
-      // this.email = ''
-
+      console.log('Start Time Set', this.startTime)
       this.$apollo.mutate({
         mutation: CREATE_OPPORTUNITY_MUTATION,
         variables: {
           // Sets variables in graphql.js
           // eslint-disable-next-line
           name: this.name,
-          ownedById: currentUser,
+          ownedById: this.$store.state.auth.user.id,
+          organizationId: this.$store.state.currentOrganization.id,
           description: this.description,
           startTime: this.startTime,
           endTime: this.endTime,
@@ -99,11 +81,17 @@ export default {
         },
         update: (store, { data: { createOpportunity } }) => {
           // Pull data from the stored query
-          const data = store.readQuery({ query: ALL_OPPORTUNITIES_QUERY })
+          const data = store.readQuery({
+            query: GET_ORGANIZATION_QUERY,
+            variables: {
+              id: this.$store.state.currentOrganization.id
+            }
+          })
           // We add the new data
-          data.allOpportunities.push(createOpportunity)
+          data.Organization.opportunities.push(createOpportunity)
           // We update the cache
-          store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+          store.writeQuery({ query: GET_ORGANIZATION_QUERY, data: data })
+          console.log('Organization.opportunities in cache updated')
         }
       }).catch((error) => {
         console.error(error)

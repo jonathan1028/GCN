@@ -54,7 +54,8 @@ export default {
           this.$store.commit('updateSelectedProfile', result.data.Organization)
           this.$store.commit('updateCurrentOrganization', result.data.Organization)
           console.log('Result', this.$store.state.currentOrganization)
-          this.$router.replace(`/organization/profile/${this.selected}`)
+          // this.$router.replace(`/organization/profile/${this.selected}`)
+          this.$router.replace('/organization/myOpportunities')
         })
       } else {
         console.log('User sent to store', this.user)

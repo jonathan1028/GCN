@@ -45,16 +45,7 @@ const store = new Vuex.Store({
       attended: false
     },
     selectedOpportunity: {},
-    currentOrganization: {
-      location: {
-        id: '',
-        name: '',
-        addressLine1: '1234 Main Street',
-        city: 'New York',
-        state: '',
-        zipcode: ''
-      }
-    },
+    currentOrganization: {},
     selectedProfile: {
       displayName: '',
       type: 'User',

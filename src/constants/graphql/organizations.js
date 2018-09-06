@@ -30,6 +30,21 @@ export const GET_ORGANIZATION_QUERY = gql`
         firstName
         lastName
       }
+      opportunities {
+        id
+        name
+        description
+        startTime
+        endTime
+        responses {
+          id
+          ownedBy {
+            id
+            firstName
+            lastName
+          }
+        }
+      }
     }
   }
 `

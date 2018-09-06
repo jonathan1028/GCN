@@ -344,7 +344,7 @@ export default {
     },
     formatDate: function (date) {
       if (date !== null) {
-        return moment(date).format('MMMM Do YYYY, h:mm a')
+        return format(date, 'MMMM Do YYYY, h:mm a')
       }
     },
     timeAgo: function (date) {
