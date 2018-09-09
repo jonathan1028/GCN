@@ -36,6 +36,14 @@ export const GET_ORGANIZATION_QUERY = gql`
         description
         startTime
         endTime
+        location {
+          id
+          name
+          addressLine1
+          city
+          state
+          zipcode
+        }
         responses {
           id
           ownedBy {

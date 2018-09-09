@@ -23,9 +23,11 @@ import gql from 'graphql-tag'
 // `
 
 export const CREATE_LOCATION_MUTATION = gql`
-  mutation CreateLocationMutation($organizationId: ID!, $addressLine1: String, $city: String, $state: String, $zipcode: String) {
+  mutation CreateLocationMutation($organizationId: ID, $opportunityId: ID, $name: String, $addressLine1: String, $city: String, $state: String, $zipcode: String) {
     createLocation(
       organizationId: $organizationId
+      opportunityId: $opportunityId
+      name: $name
       addressLine1: $addressLine1
       city: $city
       state: $state

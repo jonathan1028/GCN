@@ -1,76 +1,74 @@
 <template>
   <div class="feedPageLayout">
-    <div class="_box">Left Column</div>
-    <div class="_box">
-        <div>
-          <span
-            class="searchBlock _box"
-            v-if="activeModal === null"
-          >
-            <form class="search">
-              <input name="query" v-model="searchQuery" placeholder="Search">
-            </form>
-            <button @click="updateActiveModal('create')">
-              Create New Opportunity
-            </button>
-          </span>
-          <div>
-            <span v-if="this.$store.state.activeModal === 'create'">
-              <opportunity-create></opportunity-create>
-            </span>
-          </div>
-          <div>
-            <span v-if="this.$store.state.activeModal === 'update'">
-              <opportunity-update></opportunity-update>
-            </span>
-          </div>
-          <opportunity-list
-            :data="allOpportunities"
-            :columns="columns"
-            :searchQuery="searchQuery">
-          </opportunity-list>
-        </div>
+    <div>
+      <notifications-box
+        class="notifications-component"
+      ></notifications-box>
+      <!-- <search
+        class="search-component"
+      ></search> -->
     </div>
-    <div class="_box">Right Column</div>
+    <div>
+      <!------------------------------------------       Modals ------------------------------------ -->
+      <div class="modal-area">
+        <span v-if="this.$store.state.activeModal === 'create'">
+          <opportunity-create></opportunity-create>
+        </span>
+        <span v-if="this.$store.state.activeModal === 'update'">
+          <opportunity-update></opportunity-update>
+        </span>
+        <!-- ---------------------------------------- Create Medallion Modal ------------------------- -->
+          <span v-if="this.$store.state.showCreateMedallionModal">
+            <create-medallion
+              class="create-medallion-component"
+            ></create-medallion>
+          </span>
+        <!------------------------------------------ Create Volunteering Log Modal ------------ -->
+          <!-- <span v-if="this.$store.state.showCreateVolunteeringLog">
+            <create-volunteering-log></create-volunteering-log>
+          </span> -->
+      </div>
+      <!------------------------------------------ End of Modal Content  ---------------------------- -->
+      <span
+        class="searchBlock _box"
+        v-if="activeModal === null"
+      >
+        <form class="search">
+          <input name="query" v-model="searchQuery" placeholder="Search">
+        </form>
+        <button @click="updateActiveModal('create')">
+          Create New Opportunity
+        </button>
+      </span>
+      <opportunity-list></opportunity-list>
+    </div>
+    <div>
+      <button-menu></button-menu>
+    </div>
   </div>
 </template>
 
 <script>
-// import Feed from './Feed'
-import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
 import OpportunityCreate from '../modules/OpportunityCreate'
 import OpportunityUpdate from '../modules/OpportunityUpdate'
 import OpportunityList from '../modules/OpportunityList'
+import NotificationsBox from '../../globalModules/NotificationsBox'
+import ButtonMenu from '../../globalModules/ButtonMenu'
 
 export default {
   name: 'MyOpportunitiesPage',
   components: {
-    OpportunityCreate, OpportunityUpdate, OpportunityList
+    OpportunityCreate, OpportunityUpdate, OpportunityList, NotificationsBox, ButtonMenu
   },
   data () {
     return {
-      // showCreatePerson: this.$store.showCreatePerson,
       allOpportunities: [
         {name: 'Opp1'},
         {name: 'Opp2'},
         {name: 'Opp3'}
       ],
-      sortColumn: '',
-      searchQuery: '',
-      columns: [
-        {dbField: 'name', title: 'Name'},
-        {dbField: 'description', title: 'description'},
-        {dbField: 'startTime', title: 'Start Time'},
-        {dbField: 'endTime', title: 'End Time'},
-        {dbField: 'address', title: 'Location'}
-      ],
-      activeModal: this.$store.state.activeModal
-      // gridData: [
-      //   { name: 'Chuck Norris', power: Infinity },
-      //   { name: 'Bruce Lee', power: 9000 },
-      //   { name: 'Jackie Chan', power: 7000 },
-      //   { name: 'Jet Li', power: 8000 }
-      // ]
+      activeModal: this.$store.state.activeModal,
+      searchQuery: ''
     }
   },
   methods: {
@@ -81,22 +79,25 @@ export default {
     openCreate () {
       this.$store.commit('toggleCreateOpportunity')
     }
-    // processData (data) {
-    //   console.log(data)
-    //   return data
-    // }
-  // }
-  },
-  apollo: {
-    // allPerson here pulls the data from ALL_PEOPLE_QUERY and assigns it to the data(){} object at the top of script
-    allOpportunities: {
-      query: ALL_OPPORTUNITIES_QUERY
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.feedPageLayout {
+  margin-left: 5vw;
+  margin-right: 5vw;
+  display: grid;
+  grid-template-columns: 18vw auto 18vw;
+  grid-template-areas:
+     "left-column center-column right-column";
+  grid-column-gap: 2vh;
+  grid-row-gap: 2vh;
+}
+.--no-margin {
+  margin-top: 0vh;
+}
+
 .searchBlock {
   display: flex;
   justify-content: space-between;
@@ -112,11 +113,12 @@ export default {
     color: var(--text-color1);
   }
 }
-.feedPageLayout {
-  margin-left: 5vw;
-  margin-right: 5vw;
-  display: grid;
-  grid-template-columns: 15vw 50vw 15vw;
-  grid-column-gap: 3vw;
+
+.feed-component {
+  grid-area: feed-component;
+}
+
+.modal-area {
+  grid-area: center-column;
 }
 </style>

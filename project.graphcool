@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 22
+# version: 24
 
 type User @model {
   id: ID! @isUnique
@@ -44,6 +44,7 @@ type Location @model {
   latitude: String
   longitude: String
   organization: Organization @relation(name: "OrganizationLocation")
+  opportunity: Opportunity @relation(name: "OpportunityLocation")
 }
 
 type Opportunity @model {
@@ -53,9 +54,9 @@ type Opportunity @model {
   ownedBy: User @relation(name: "UserOpportunities")
   name: String
   description: String
-  location: String
   startTime: DateTime
   endTime: DateTime
+  location: Location @relation(name: "OpportunityLocation")
   organization: Organization @relation(name: "OrganizationsOpportunities")
   responses: [Response!]! @relation(name: "OpportunityResponses")
 }

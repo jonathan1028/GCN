@@ -160,7 +160,7 @@ li {
 /* ------------------------------------ Application Button Styling ----------------------------- */
 ._button1 {
   width: 100%;
-  height: 6vh;
+  height: 5vh;
   color: var(--font-color1);
   font-size: 2vh;
   background-color: var(--background-color1);
@@ -168,6 +168,7 @@ li {
   text-align: center;
   white-space: nowrap;
   border: none;
+  cursor: pointer;
 }
 ._button2 {
   width: 100%;
@@ -192,6 +193,7 @@ li {
   // display: flex;
   // align-self: flex-start;
   // justify-self: center;
+  cursor: pointer;
 }
 
 ._button4{

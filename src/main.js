@@ -24,7 +24,7 @@ Vue.filter('timeAgo', function (date) {
     return distanceInWords(date, now) + ' ago'
   }
 })
-Vue.filter('capitalizeFirst', function () {
+Vue.filter('capitalizeFirst', function (str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 })
 

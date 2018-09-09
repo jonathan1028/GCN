@@ -27,16 +27,27 @@
               class="icon"
               name="regular/calendar-alt"
             ></icon>
-            <div>{{item.startTime | formatDate}} <span v-if="item.endTime"> - </span></div>
+            <div>
+              <div>{{item.startTime | formatDate}} <span v-if="item.endTime"> - </span></div>
+              <div>{{item.endTime | formatDate}}</div>
+            </div>
             <icon
               class="icon"
               name="map-marker-alt"
             ></icon>
-            <div>6500 Metropolis Dr</div>
-            <div></div>
-            <div>{{item.endTime | formatDate}}</div>
-            <div></div>
-            <div>Austin, TX 78744</div>
+            <div>
+              <span v-if="item.location">
+                <div>
+                  {{item.location.name}}
+                </div>
+                <div>
+                  {{item.location.addressLine1}}
+                </div>
+                <div>
+                  {{`${item.location.city}, ${item.location.state} ${item.location.zipcode}`}}
+                </div>
+              </span>
+            </div>
           </div>
         </div>
         <!-- ---------------------------------------- User Responses -------------------------- -->
@@ -102,42 +113,43 @@
 </template>
 
 <script>
+import { GET_ORGANIZATION_QUERY } from '../../../constants/graphql/organizations'
 import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth } from 'date-fns'
-
-console.log('Test, test ,test')
 
 export default {
   name: 'OpportunityList',
-  props: {
-    data: Array,
-    columns: Array
-  },
   data: function () {
-    // console.log('Search Query', this.$store.state.searchQuery)
-    var sortOrders = {}
-    const fields = this.columns.map(x => x.dbField)
-    fields.forEach(function (key) {
-      sortOrders[key] = 1
-    })
     return {
-      sortKey: '',
-      sortOrders: sortOrders,
       searchQueryFilters: [],
-      Organization: this.$store.state.currentOrganization
-      // showResponsesActive: false
+      Organization: {}
     }
   },
-  filters : {
+  apollo: {
+    // The name of this variable must equal to the name of back-end API function
+    Organization: {
+      query: GET_ORGANIZATION_QUERY,
+      variables () {
+        return {
+          id: this.$store.state.selectedProfile.id
+        }
+      },
+      result ({ data }) {
+        // Creates clone of data because Apollo data is read only
+        this.Organization = JSON.parse(JSON.stringify(data.Organization))
+      }
+    }
+  },
+  filters: {
     formatDate: function (date) {
       if (date !== null) {
         return format(date, 'MMMM Do YYYY, h:mm a')
       }
-    },
+    }
   },
   computed: {
     // ...mapGetters(['authenticated', 'userId', 'userEmail', 'user', 'selectedProfile']),
     filteredData: function () {
-      let data = this.$store.state.currentOrganization.opportunities
+      let data = this.Organization.opportunities
       console.log('Opportunities', data)
       let filters = JSON.parse(JSON.stringify(this.$store.state.searchQueryFilters))
       let userId = localStorage.getItem('graphcool-user-id')
@@ -237,42 +249,8 @@ export default {
     }
   },
   methods: {
-    showResponses (item) {
-      item['showResponsesActive'] = !item.showResponsesActive
-      console.log('Response State', item.showResponsesActive)
-    },
     getName (firstName, lastName) {
       return `${firstName} ${lastName}`
-    },
-    isInterested (opportunity) {
-      let userId = localStorage.getItem('graphcool-user-id')
-      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
-      if (response) {
-        return response.type === 'Interested'
-      } else {
-        return false
-      }
-    },
-    isGoing (opportunity) {
-      let userId = localStorage.getItem('graphcool-user-id')
-      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
-      if (response) {
-        return response.type === 'Going'
-      }
-      return false
-    },
-    attended (opportunity) {
-      let userId = localStorage.getItem('graphcool-user-id')
-      let response = opportunity.responses.find(x => x.ownedBy.id === userId)
-      if (response) {
-        return response.type === 'Attended'
-      }
-      return false
-    },
-    hasResponded (opportunity) {
-      let userId = localStorage.getItem('graphcool-user-id')
-      let index = opportunity.responses.findIndex(x => x.ownedBy.id === userId)
-      return index !== -1
     }
   }
 }
@@ -302,7 +280,7 @@ export default {
      "responses        responses        responses";
   grid-column-gap: 2%;
   background-color: white;
-  margin-top: 1%;
+  margin-bottom: 1vh;
   padding: 2%;
   /* border: 1px solid #BFBFBF;
   background-color: white;
@@ -347,6 +325,8 @@ export default {
   grid-area: description;
   margin-top: 1vh;
   font-weight: 100;
+  color: var(--font-color1);
+  font-size: 1.8vh;
 }
 
 .details {
@@ -354,7 +334,8 @@ export default {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: 5% 45% 5% 45%;
-  margin-top: 1vh;
+  margin-top: 2vh;
+  font-size: 1.8vh;
 }
 
 .textBlock {

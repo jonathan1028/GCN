@@ -6,20 +6,20 @@
             <!-- Logo -->
             <div class="logo">GCN - Organizations</div>
             <div class="nav-buttons">
-              <router-link to="/feed">Feed</router-link>
-              <div>|</div>
-              <router-link to="/notifications">Notifications</router-link>
-              <div>|</div>
-              <router-link :to="{path: '/organization/profile/:id', params: {id: selectedProfile.id}}">Profile</router-link>
-              <div>|</div>
-              <router-link to="/organization/myopportunities">My Opportunities</router-link>
-              <div>|</div>
-              <router-link to="/admin/dashboard">Admin</router-link>
             </div>
           </div>
           <!-- Login buttons   -->
           <div class="right-side-links">
+            <router-link to="/organization/myopportunities">My Opportunities</router-link>
+            <div>|</div>
+            <router-link to="/feed">Public Feed</router-link>
+            <div>|</div>
+            <router-link to="/notifications">Notifications</router-link>
+            <div>|</div>
+            <router-link :to="{path: '/organization/profile/:id', params: {id: selectedProfile.id}}">Profile</router-link>
+            <div>|</div>
             <profile-selection></profile-selection>
+            <div>|</div>
             <div
               v-if="authenticated"
               class="link"

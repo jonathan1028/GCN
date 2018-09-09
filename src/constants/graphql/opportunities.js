@@ -10,7 +10,6 @@ export const ALL_OPPORTUNITIES_QUERY = gql`
       description
       startTime
       endTime
-      location
       ownedBy {
         id
       }
@@ -30,7 +29,7 @@ export const ALL_OPPORTUNITIES_QUERY = gql`
 
 export const CREATE_OPPORTUNITY_MUTATION = gql`
   mutation CreateOpportunityMutation($name: String, $ownedById: ID!, $organizationId: ID!, $description: String, 
-  $startTime: DateTime, $endTime: DateTime, $location: String) {
+  $startTime: DateTime, $endTime: DateTime) {
     createOpportunity(
       name: $name
       ownedById: $ownedById
@@ -38,14 +37,12 @@ export const CREATE_OPPORTUNITY_MUTATION = gql`
       description: $description
       startTime: $startTime
       endTime: $endTime
-      location: $location
     ) {
       id
       name
       description
       startTime
       endTime
-      location
       ownedBy {
         id
         firstName
