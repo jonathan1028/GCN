@@ -17,7 +17,7 @@
             <div>{{item.name}}</div>
           </div>
           <div class="org-name">
-            {{`with Organization Name`}}
+            <!-- {{`with ${Organization.name}`}} -->
           </div>
           <div class="description">
             {{item.description}}
@@ -27,16 +27,27 @@
               class="icon"
               name="regular/calendar-alt"
             ></icon>
-            <div>{{item.startTime | formatDate}} <span v-if="item.endTime"> - </span></div>
+            <div>
+              <div>{{item.startTime | formatDate}} <span v-if="item.endTime"> - </span></div>
+              <div>{{item.endTime | formatDate}}</div>
+            </div>
             <icon
               class="icon"
               name="map-marker-alt"
             ></icon>
-            <div>6500 Metropolis Dr</div>
-            <div></div>
-            <div>{{item.endTime | formatDate}}</div>
-            <div></div>
-            <div>Austin, TX 78744</div>
+            <div>
+              <span v-if="item.location">
+                <div>
+                  {{item.location.name}}
+                </div>
+                <div>
+                  {{item.location.addressLine1}}
+                </div>
+                <div>
+                  {{`${item.location.city}, ${item.location.state} ${item.location.zipcode}`}}
+                </div>
+              </span>
+            </div>
           </div>
         </div>
         <div class="buttons-block">
@@ -590,6 +601,8 @@ export default {
   grid-area: description;
   margin-top: 1vh;
   font-weight: 100;
+  color: var(--font-color1);
+  font-size: 1.8vh;
 }
 
 .details {
@@ -597,7 +610,8 @@ export default {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: 5% 45% 5% 45%;
-  margin-top: 1vh;
+  margin-top: 2vh;
+  font-size: 1.8vh;
 }
 
 .textBlock {
