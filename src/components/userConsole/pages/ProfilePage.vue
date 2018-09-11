@@ -298,8 +298,8 @@ export default {
   grid-template-columns: 100%;
   grid-template-rows: 25vh auto auto;
   background-color: white;
-  margin-left: 20vw;
-  margin-right: 20vw;
+  // margin-left: 20vw;
+  // margin-right: 20vw;
   padding: 3%;
 }
 .profileHeader {

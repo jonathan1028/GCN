@@ -63,7 +63,4 @@ export default {
 .search{
   width: 38%;
 }
-.adminPage {
-  margin: 0vh 5vw;
-}
 </style>

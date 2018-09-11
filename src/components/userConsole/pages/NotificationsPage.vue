@@ -54,8 +54,8 @@ export default {
 .pageLayout {
   // padding: 0vh;
   // background-color: pink;
-  margin-left: 5vw;
-  margin-right: 5vw;
+  // margin-left: 5vw;
+  // margin-right: 5vw;
   display: grid;
   grid-template-columns: 18vw auto 18vw;
   grid-column-gap: 2vh;
