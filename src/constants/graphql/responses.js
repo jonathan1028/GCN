@@ -26,6 +26,11 @@ mutation CreateResponseMutation($type: String, $ownedById: ID!, $opportunityId: 
     opportunityId: $opportunityId
   ) {
     id
+    opportunity {
+      organization {
+        id
+      }
+    }
   }
 }
 `

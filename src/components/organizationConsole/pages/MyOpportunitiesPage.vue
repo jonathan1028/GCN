@@ -85,8 +85,8 @@ export default {
 
 <style lang="scss" scoped>
 .feedPageLayout {
-  margin-left: 5vw;
-  margin-right: 5vw;
+  // margin-left: 5vw;
+  // margin-right: 5vw;
   display: grid;
   grid-template-columns: 18vw auto 18vw;
   grid-template-areas:

@@ -53,6 +53,29 @@ export const GET_ORGANIZATION_QUERY = gql`
           }
         }
       }
+      volunteers {
+          id
+          firstName
+          lastName
+          email
+          phone
+        }
+    }
+  }
+`
+
+export const ADD_VOLUNTEER_MUTATION = gql`
+  mutation AddToVolunteersOnOrganization ($volunteersUserId: ID!, $volunteeredAtOrganizationId: ID!){
+    addToVolunteersOnOrganization(
+      volunteersUserId: $volunteersUserId 
+      volunteeredAtOrganizationId: $volunteeredAtOrganizationId
+    ) {
+      volunteersUser {
+        id
+      }
+      volunteeredAtOrganization {
+        id
+      }
     }
   }
 `
@@ -71,7 +94,8 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 
 export const UPDATE_ORGANIZATION_MUTATION = gql`
   mutation UpdateOrganizationMutation($id: ID!,  $name: String, $phone: String, 
-  $email: String, $website: String, $addressLine1: String, $city: String, $state: String, $zipcode: String) {
+  $email: String, $website: String, $addressLine1: String, $city: String, $state: String, $zipcode: String,
+  $volunteersIds: [ID!]) {
     updateOrganization(
       id: $id,
       name: $name
@@ -84,6 +108,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
         state: $state
         zipcode: $zipcode
       }
+      volunteersIds: $volunteersIds
     ) {
       id
     }    

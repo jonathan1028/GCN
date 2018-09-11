@@ -196,6 +196,7 @@
 <script>
 import { ALL_RESPONSES_QUERY, CREATE_RESPONSE_MUTATION, DELETE_RESPONSE_MUTATION } from '../../../constants/graphql/responses'
 import { ALL_OPPORTUNITIES_QUERY } from '../../../constants/graphql/opportunities'
+import { ADD_VOLUNTEER_MUTATION } from '../../../constants/graphql/organizations'
 import { format, isToday, isTomorrow, isSaturday, isSunday, isThisWeek, isThisMonth, distanceInWords } from 'date-fns'
 
 console.log('Test, test ,test')
@@ -492,6 +493,24 @@ export default {
             }
             // Write new data back to the store
             store.writeQuery({ query: ALL_OPPORTUNITIES_QUERY, data: data })
+          }
+        }).then((result) => {
+          // Check to see if user has been added as a volunteer to this Organization yet
+          // if no add them
+          console.log('Result1', opportunity.organization.volunteers)
+          let index = opportunity.organization.volunteers.findIndex(x => x.id === userId)
+          if (index === -1) {
+            this.$apollo.mutate({
+              mutation: ADD_VOLUNTEER_MUTATION,
+              variables: {
+                volunteeredAtOrganizationId: opportunity.organization.id,
+                volunteersUserId: userId
+              }
+            }).then((result) => {
+              console.log('Result', result)
+            }).catch((error) => {
+              console.error(error)
+            })
           }
         })
       }

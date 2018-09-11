@@ -13,6 +13,21 @@ export const ALL_OPPORTUNITIES_QUERY = gql`
       ownedBy {
         id
       }
+      location {
+        id
+        name
+        addressLine1
+        city
+        state
+        zipcode
+      }
+      organization {
+        id
+        volunteers {
+          id
+          firstName
+        }
+      }
       responses {
         id
         createdAt

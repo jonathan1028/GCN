@@ -1,5 +1,5 @@
 # project: cjj61omlj2d790156bk4oimkn
-# version: 24
+# version: 25
 
 type User @model {
   id: ID! @isUnique
@@ -19,6 +19,21 @@ type User @model {
   medallionsIssued: [Medallion!]! @relation(name: "UserIssuedMedallions")
   organizations: [Organization!]! @relation(name: "OrgsPersonnel")
   responses: [Response!]! @relation(name: "UserResponses")
+  volunteeredAt: [Organization!]! @relation(name: "VolunteersOnOrganization")
+}
+
+type Organization @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  phone: String
+  email: String
+  website: String
+  location: Location @relation(name: "OrganizationLocation")
+  personnel: [User!]! @relation(name: "OrgsPersonnel")
+  opportunities: [Opportunity!]! @relation(name: "OrganizationsOpportunities")
+  volunteers: [User!]! @relation(name: "VolunteersOnOrganization")
 }
 
 type File @model {
@@ -112,17 +127,4 @@ type Preferences @model {
   opportunitiesRecurring: Boolean
   opportunitiesEmailFrequency: String
   ownedBy: User @relation(name: "UserPreferences")
-}
-
-type Organization @model {
-  id: ID! @isUnique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String
-  phone: String
-  email: String
-  website: String
-  location: Location @relation(name: "OrganizationLocation")
-  personnel: [User!]! @relation(name: "OrgsPersonnel")
-  opportunities: [Opportunity!]! @relation(name: "OrganizationsOpportunities")
 }

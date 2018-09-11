@@ -10,7 +10,9 @@
           </div>
           <!-- Login buttons   -->
           <div class="right-side-links">
-            <router-link to="/organization/myopportunities">My Opportunities</router-link>
+            <router-link to="/organization/myOpportunities">My Opportunities</router-link>
+            <div>|</div>
+            <router-link to="/organization/myVolunteers">My Volunteers</router-link>
             <div>|</div>
             <router-link to="/feed">Public Feed</router-link>
             <div>|</div>
@@ -62,6 +64,8 @@ export default {
 }
 .main-content {
   margin-top: 8vh;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 .header{
   // position: fixed;
