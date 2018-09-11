@@ -39,6 +39,9 @@
           <div v-else-if="col.dbField === 'ownedBy'">
             <span>{{ getName(row[col.dbField]) }}</span>
           </div>
+          <div v-else-if="col.dbField === 'location'">
+            <span>{{ getLocation(row[col.dbField]) }}</span>
+          </div>
           <div v-else>
             {{row[col.dbField]}}
           </div>
@@ -112,6 +115,11 @@ export default {
     getName (owner) {
       return owner.firstName + ' ' + owner.lastName
     },
+    getLocation (location) {
+      if (location !== null) {
+        return location.name + ' ' + location.addressLine1 + ' ' + location.city + ' ' + location.state + ', ' + location.zipcode
+      }
+    },
     isCreatedAt: function (field) {
       if (field === 'createdAt') {
         return true
@@ -132,7 +140,7 @@ export default {
     },
     view: function (obj) {
       // Creates a dynamic path and stores to localStorage regardless of what type of object is passed in
-      let path = '/admin/' + obj.__typename.toLowerCase() + '/' + obj.id
+      let path = '/organization/' + obj.__typename.toLowerCase() + '/' + obj.id
 
       localStorage.setItem(obj.__typename.toLowerCase(), JSON.stringify(obj))
       this.$router.push({path: path})

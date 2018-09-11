@@ -1,15 +1,6 @@
 <template>
-  <div class="feedPageLayout">
-    <div>
-      <notifications-box
-        class="notifications-component"
-      ></notifications-box>
-      <!-- <search
-        class="search-component"
-      ></search> -->
-    </div>
-    <div>
-      <!------------------------------------------       Modals ------------------------------------ -->
+  <div class="page">
+    <!------------------------------------------       Modals ------------------------------------ -->
       <div class="modal-area">
         <span v-if="this.$store.state.activeModal === 'create'">
           <opportunity-create></opportunity-create>
@@ -17,58 +8,75 @@
         <span v-if="this.$store.state.activeModal === 'update'">
           <opportunity-update></opportunity-update>
         </span>
-        <!-- ---------------------------------------- Create Medallion Modal ------------------------- -->
-          <span v-if="this.$store.state.showCreateMedallionModal">
-            <create-medallion
-              class="create-medallion-component"
-            ></create-medallion>
-          </span>
-        <!------------------------------------------ Create Volunteering Log Modal ------------ -->
-          <!-- <span v-if="this.$store.state.showCreateVolunteeringLog">
-            <create-volunteering-log></create-volunteering-log>
-          </span> -->
       </div>
-      <!------------------------------------------ End of Modal Content  ---------------------------- -->
-      <span
-        class="searchBlock _box"
-        v-if="activeModal === null"
-      >
-        <form class="search">
-          <input name="query" v-model="searchQuery" placeholder="Search">
-        </form>
-        <button @click="updateActiveModal('create')">
-          Create New Opportunity
-        </button>
-      </span>
-      <opportunity-list></opportunity-list>
-    </div>
+    <!------------------------------------------ Create Volunteering Log Modal ------------ -->
+    <h1>My Opportunities</h1>
     <div>
-      <button-menu></button-menu>
+      <form class="search">
+        <input name="query" v-model="searchQuery" placeholder="Search">
+      </form>
+      <base-table
+        :data="query"
+        :columns="columns"
+        :filter-key="searchQuery">
+      </base-table>
     </div>
   </div>
 </template>
 
 <script>
+import BaseTable from '../modules/BaseTable'
+// import { ALL_USERS_QUERY } from '../../../constants/graphql/users'
+import { GET_ORGANIZATION_QUERY } from '../../../constants/graphql/organizations'
 import OpportunityCreate from '../modules/OpportunityCreate'
 import OpportunityUpdate from '../modules/OpportunityUpdate'
-import OpportunityList from '../modules/OpportunityList'
-import NotificationsBox from '../../globalModules/NotificationsBox'
-import ButtonMenu from '../../globalModules/ButtonMenu'
 
 export default {
   name: 'MyOpportunitiesPage',
   components: {
-    OpportunityCreate, OpportunityUpdate, OpportunityList, NotificationsBox, ButtonMenu
+    BaseTable, OpportunityCreate, OpportunityUpdate
   },
   data () {
     return {
+      activeModal: this.$store.state.activeModal,
+      query: [],
       allOpportunities: [
         {name: 'Opp1'},
         {name: 'Opp2'},
         {name: 'Opp3'}
       ],
-      activeModal: this.$store.state.activeModal,
-      searchQuery: ''
+      sortColumn: '',
+      searchQuery: '',
+      columns: [
+        {dbField: 'name', title: 'name'},
+        {dbField: 'description', title: 'decription'},
+        {dbField: 'startTime', title: 'start time'},
+        {dbField: 'endTime', title: 'end time'},
+        {dbField: 'location', title: 'location'}]
+    }
+  },
+  apollo: {
+    // allUser here pulls the data from ALL_USERS_QUERY and assigns it to the data(){} object at the top of script
+    // allUsers: {
+    //   query: ALL_USERS_QUERY,
+    //   result ({ data }) {
+    //     // Sets variable query to the gql data for a more modular UI template
+    //     this.query = data.allUsers
+    //   }
+    // },
+    Organization: {
+      query: GET_ORGANIZATION_QUERY,
+      variables () {
+        return {
+          // By using a reactive variable
+          id: this.$store.state.currentOrganization.id
+        }
+      },
+      result ({ data }) {
+        console.log('Organization', data.Organization)
+        // Sets variable query to the gql data for a more modular UI template
+        this.query = data.Organization.opportunities
+      }
     }
   },
   methods: {
@@ -84,41 +92,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.feedPageLayout {
-  // margin-left: 5vw;
-  // margin-right: 5vw;
-  display: grid;
-  grid-template-columns: 18vw auto 18vw;
-  grid-template-areas:
-     "left-column center-column right-column";
-  grid-column-gap: 2vh;
-  grid-row-gap: 2vh;
+.page {
+  padding: 3vh;
+  background-color: white;
 }
-.--no-margin {
-  margin-top: 0vh;
+.search{
+  width: 38%;
 }
-
-.searchBlock {
-  display: flex;
-  justify-content: space-between;
-  padding: 1%;
-}
-.search {
-  height: 4vh;
-  // padding: 1%;
-  input {
-    width: 25vw;
-    height: 4vh;
-    font-size: 2.5vh;
-    color: var(--text-color1);
-  }
-}
-
-.feed-component {
-  grid-area: feed-component;
-}
-
-.modal-area {
-  grid-area: center-column;
+.adminPage {
+  margin: 0vh 5vw;
 }
 </style>

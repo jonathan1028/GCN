@@ -13,6 +13,7 @@ import OrganizationConsoleLayout from '../components/organizationConsole/Organiz
 import OrganizationProfilePage from '../components/organizationConsole/pages/OrganizationProfilePage'
 import MyOpportunitiesPage from '../components/organizationConsole/pages/MyOpportunitiesPage'
 import MyVolunteersPage from '../components/organizationConsole/pages/MyVolunteersPage'
+import OpportunityPage from '../components/organizationConsole/pages/OpportunityPage'
 
 // User Console
 import UserConsoleLayout from '../components/userConsole/UserConsoleLayout'
@@ -128,6 +129,13 @@ const router = new Router({
         {
           path: 'myOpportunities',
           component: MyOpportunitiesPage,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: 'opportunity/:id',
+          component: OpportunityPage,
           meta: {
             requiresAuth: true
           }

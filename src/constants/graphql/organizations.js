@@ -46,6 +46,7 @@ export const GET_ORGANIZATION_QUERY = gql`
         }
         responses {
           id
+          type
           ownedBy {
             id
             firstName
