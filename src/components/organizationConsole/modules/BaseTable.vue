@@ -39,6 +39,12 @@
           <div v-else-if="col.dbField === 'ownedBy'">
             <span>{{ getName(row[col.dbField]) }}</span>
           </div>
+          <div v-else-if="col.dbField === 'startTime'">
+            <span>{{ row[col.dbField] | formatDateLong}}</span>
+          </div>
+          <div v-else-if="col.dbField === 'endTime'">
+            <span>{{ row[col.dbField] | formatDateShort}}</span>
+          </div>
           <div v-else-if="col.dbField === 'location'">
             <span>{{ getLocation(row[col.dbField]) }}</span>
           </div>

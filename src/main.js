@@ -13,9 +13,20 @@ let userId = localStorage.getItem(GC_USER_ID)
 
 Vue.use(Vuex)
 
+Vue.filter('test', function (data) {
+  return data + 'test'
+})
+
 Vue.filter('formatDateLong', function (date) {
   if (date) {
-    return format(date).format('MMMM Do YYYY, h:mm:ssa')
+    return format(date, 'MMMM Do YYYY, h:mma')
+    // return date
+  }
+})
+Vue.filter('formatDateShort', function (date) {
+  if (date) {
+    return format(date, 'MM/DD/YYYY')
+    // return date
   }
 })
 Vue.filter('timeAgo', function (date) {
